@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Class Aliases
+    |--------------------------------------------------------------------------
+    |
+    | Vuexy layout'ları arayüz ayarlarını "Helper::appClasses()" ile okur.
+    |
+    */
+
+    'aliases' => [
+        'Helper' => App\Helpers\Helpers::class,
+    ],
+
 ];

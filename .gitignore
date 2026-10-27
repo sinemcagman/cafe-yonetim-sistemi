@@ -25,3 +25,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Vuexy build sırasında node_modules içinden üretilen font dosyaları
+/resources/assets/vendor/fonts/flags
+/resources/assets/vendor/fonts/fontawesome
