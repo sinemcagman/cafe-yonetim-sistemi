@@ -27,6 +27,7 @@ class DiningTableController extends Controller
             'areas' => $tables->groupBy(fn (DiningTable $table) => $table->area ?: 'Diğer'),
             'availableCount' => $tables->where('is_active', true)->where('status', TableStatus::Bos)->count(),
             'occupiedCount' => $tables->where('status', TableStatus::Dolu)->count(),
+            'nextNumber' => (int) DiningTable::max('number') + 1,
         ]);
     }
 

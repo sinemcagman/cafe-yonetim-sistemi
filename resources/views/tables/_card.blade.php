@@ -1,61 +1,61 @@
-<div class="col-xxl-2 col-lg-3 col-md-4 col-6">
-  <div @class([
-      'card',
-      'bg-success bg-opacity-05 border-0 shadow-none' => $table->is_active && $table->isAvailable(),
-      'bg-danger bg-opacity-05 border-0 shadow-none' => ! $table->isAvailable(),
-      'opacity-50' => ! $table->is_active,
-  ])>
-    <div class="card-header d-flex align-items-center justify-content-between border-0 pb-0 p-3">
-      @if ($table->is_active)
-        <x-status-badge :status="$table->status" />
-      @else
-        <span class="badge badge-lg bg-secondary-subtle text-secondary">Pasif</span>
-      @endif
-      @if (auth()->user()->isManager())
-        <div class="btn-group">
-          <button class="btn btn-white btn-sm btn-shadow btn-icon waves-effect dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fi fi-rr-menu-dots"></i>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-              <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('tables.edit', $table) }}">
-                <i class="fi fi-rr-edit"></i> Düzenle
-              </a>
-            </li>
-            <li>
-              <x-delete-button :action="route('tables.destroy', $table)" confirm="{{ $table->label() }} silinsin mi?" />
-            </li>
-          </ul>
+@php
+  $color = ! $table->is_active ? 'secondary' : ($table->isAvailable() ? 'success' : 'danger');
+  $filterKey = ! $table->is_active ? 'pasif' : ($table->isAvailable() ? 'bos' : 'dolu');
+@endphp
+
+<div class="col-6 col-md-4 col-xl-3 col-xxl-2" data-table-card="{{ $filterKey }}" id="masa-{{ $table->number }}">
+  <div @class(['card h-100 border-0 border-top border-3', "border-{$color}", 'opacity-75' => ! $table->is_active])>
+    <div class="card-body d-flex flex-column">
+      <div class="d-flex justify-content-between align-items-start mb-4">
+        <div class="avatar avatar-md">
+          <span class="avatar-initial rounded bg-label-{{ $color }} fs-5 fw-bold">{{ $table->number }}</span>
         </div>
-      @endif
-    </div>
-    <div class="card-body p-3 pt-2 text-center">
-      <div @class([
-          'avatar avatar-lg rounded-circle text-white mx-auto mb-2',
-          'bg-success shadow-success' => $table->isAvailable(),
-          'bg-danger shadow-danger' => ! $table->isAvailable(),
-      ])>
-        <i class="fi fi-rr-restaurant"></i>
+        @if (auth()->user()->isManager())
+          <div class="dropdown">
+            <button type="button" class="btn btn-icon btn-text-secondary rounded-pill btn-sm dropdown-toggle hide-arrow p-0"
+              data-bs-toggle="dropdown" aria-label="Masa işlemleri">
+              <i class="icon-base ti tabler-dots-vertical icon-md"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+              <button type="button" class="dropdown-item d-flex align-items-center gap-2" data-table-edit
+                data-action="{{ route('tables.update', $table) }}"
+                data-id="{{ $table->id }}"
+                data-number="{{ $table->number }}"
+                data-area="{{ $table->area }}"
+                data-capacity="{{ $table->capacity }}"
+                data-active="{{ $table->is_active ? 1 : 0 }}">
+                <i class="icon-base ti tabler-edit icon-sm"></i> Düzenle
+              </button>
+              <div class="dropdown-divider"></div>
+              <x-delete-button :action="route('tables.destroy', $table)" confirm="{{ $table->label() }} silinsin mi?"
+                text="Sipariş geçmişi olan masalar silinemez; bunun yerine pasif yapabilirsiniz." />
+            </div>
+          </div>
+        @endif
       </div>
-      <h5 class="mb-0 fw-bold">{{ $table->label() }}</h5>
-      <small class="text-muted">{{ $table->capacity }} kişilik</small>
-      @if ($table->openOrder)
-        <hr class="border-dashed my-2">
-        <div class="text-start small">
-          <div class="d-flex justify-content-between">
-            <span>Hesap</span>
-            <strong>{{ money($table->openOrder->total) }}</strong>
+
+      <h5 class="mb-1">{{ $table->label() }}</h5>
+      <div class="d-flex align-items-center gap-2 mb-3 small text-body-secondary">
+        <span><i class="icon-base ti tabler-users icon-14px me-1"></i>{{ $table->capacity }} kişilik</span>
+      </div>
+
+      <div class="mt-auto">
+        @if (! $table->is_active)
+          <span class="badge bg-label-secondary">Pasif</span>
+        @elseif ($table->openOrder)
+          <div class="bg-label-danger rounded p-2 small">
+            <div class="d-flex justify-content-between">
+              <span>Hesap</span><strong>{{ money($table->openOrder->total) }}</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span><i class="icon-base ti tabler-clock icon-12px me-1"></i>{{ $table->openOrder->opened_at->diffForHumans(null, true) }}</span>
+              <span class="text-truncate ms-2">{{ $table->openOrder->user->name }}</span>
+            </div>
           </div>
-          <div class="d-flex justify-content-between">
-            <span>Açılış</span>
-            <span>{{ $table->openOrder->opened_at->diffForHumans() }}</span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span>Garson</span>
-            <span>{{ $table->openOrder->user->name }}</span>
-          </div>
-        </div>
-      @endif
+        @else
+          <x-status-badge :status="$table->status" />
+        @endif
+      </div>
     </div>
   </div>
 </div>
