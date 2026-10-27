@@ -16,6 +16,15 @@
               <span class="menu-label">Panel</span>
             </a>
           </li>
+          <li class="menu-heading">
+            <span class="menu-label">Salon</span>
+          </li>
+          <li class="menu-item">
+            <a @class(['menu-link', 'active' => request()->routeIs('tables.*')]) href="{{ route('tables.index') }}">
+              <i class="fi fi-rr-restaurant"></i>
+              <span class="menu-label">Masalar</span>
+            </a>
+          </li>
           @if (auth()->user()->isManager())
             <li class="menu-heading">
               <span class="menu-label">Menü Yönetimi</span>

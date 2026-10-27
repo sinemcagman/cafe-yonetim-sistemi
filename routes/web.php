@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DiningTableController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StockMovementController;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,14 @@ Route::middleware('auth')->group(function () {
 
     Route::view('/', 'dashboard')->name('dashboard');
 
+    Route::get('masalar', [DiningTableController::class, 'index'])->name('tables.index');
+
     Route::middleware('role:yonetici')->group(function () {
+        Route::resource('masalar', DiningTableController::class)
+            ->except(['index', 'show'])
+            ->parameters(['masalar' => 'table'])
+            ->names('tables');
+
         Route::resource('kategoriler', CategoryController::class)
             ->except('show')
             ->parameters(['kategoriler' => 'category'])
