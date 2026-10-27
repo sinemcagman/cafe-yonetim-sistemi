@@ -14,9 +14,9 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $users = [
-            ['name' => 'Kafe Yöneticisi', 'email' => 'yonetici@kafe.test', 'role' => UserRole::Yonetici],
-            ['name' => 'Ayşe Garson', 'email' => 'garson@kafe.test', 'role' => UserRole::Garson],
-            ['name' => 'Mehmet Kasiyer', 'email' => 'kasiyer@kafe.test', 'role' => UserRole::Kasiyer],
+            ['name' => 'Selin Aydın', 'email' => 'yonetici@kafe.test', 'role' => UserRole::Yonetici],
+            ['name' => 'Ayşe Demir', 'email' => 'garson@kafe.test', 'role' => UserRole::Garson],
+            ['name' => 'Mehmet Kaya', 'email' => 'kasiyer@kafe.test', 'role' => UserRole::Kasiyer],
         ];
 
         foreach ($users as $user) {

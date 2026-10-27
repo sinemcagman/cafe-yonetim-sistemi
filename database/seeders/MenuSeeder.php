@@ -14,7 +14,7 @@ class MenuSeeder extends Seeder
     {
         $menu = [
             'Sıcak İçecekler' => [
-                'icon' => 'fi fi-rr-mug-hot-alt',
+                'icon' => 'tabler-coffee',
                 'products' => [
                     ['Çay', 15, 200],
                     ['Fincan Çay', 25, 150],
@@ -25,7 +25,7 @@ class MenuSeeder extends Seeder
                 ],
             ],
             'Soğuk İçecekler' => [
-                'icon' => 'fi fi-rr-glass',
+                'icon' => 'tabler-glass-full',
                 'products' => [
                     ['Su', 10, 120],
                     ['Ayran', 25, 50],
@@ -35,7 +35,7 @@ class MenuSeeder extends Seeder
                 ],
             ],
             'Yiyecekler' => [
-                'icon' => 'fi fi-rr-hamburger-soda',
+                'icon' => 'tabler-baguette',
                 'products' => [
                     ['Kaşarlı Tost', 80, 40],
                     ['Karışık Tost', 100, 35],
@@ -45,7 +45,7 @@ class MenuSeeder extends Seeder
                 ],
             ],
             'Tatlılar' => [
-                'icon' => 'fi fi-rr-cake-birthday',
+                'icon' => 'tabler-cake',
                 'products' => [
                     ['Cheesecake', 110, 12],
                     ['Brownie', 90, 15],

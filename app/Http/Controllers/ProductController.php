@@ -22,15 +22,21 @@ class ProductController extends Controller
             ->when($request->filled('kategori'), fn ($query) => $query->where('category_id', $request->integer('kategori')))
             ->when($request->filled('ara'), fn ($query) => $query->where('name', 'like', '%'.$request->string('ara').'%'))
             ->when($request->boolean('kritik'), fn ($query) => $query->lowStock())
+            ->when($request->filled('durum'), fn ($query) => $query->where('is_active', $request->input('durum') === 'satista'))
             ->orderBy('category_id')
             ->orderBy('name')
-            ->paginate(20)
+            ->paginate($this->perPage($request))
             ->withQueryString();
 
         return view('products.index', [
             'products' => $products,
             'categories' => Category::ordered()->get(),
-            'lowStockCount' => Product::active()->lowStock()->count(),
+            'summary' => [
+                'total' => Product::count(),
+                'active' => Product::active()->count(),
+                'low_stock' => Product::active()->lowStock()->count(),
+                'stock_value' => (float) Product::active()->sum(DB::raw('price * stock_quantity')),
+            ],
         ]);
     }
 

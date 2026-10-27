@@ -19,7 +19,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => fake()->unique()->words(2, true),
-            'icon' => 'fi fi-rr-utensils',
+            'icon' => 'tabler-tools-kitchen-2',
             'sort_order' => fake()->numberBetween(0, 20),
             'is_active' => true,
         ];

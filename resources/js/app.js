@@ -1,5 +1,6 @@
 import './bootstrap';
 import { bindAutoSubmit, initDatepickers, initSelect2 } from './form-plugins';
+import { initIconPickers } from './icon-picker';
 
 import.meta.glob(['../assets/img/**', '../assets/vendor/fonts/**']);
 
@@ -81,3 +82,4 @@ initTooltips();
 initSelect2();
 initDatepickers();
 bindAutoSubmit();
+initIconPickers();
