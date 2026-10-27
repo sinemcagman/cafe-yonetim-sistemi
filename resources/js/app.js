@@ -1,4 +1,5 @@
 import './bootstrap';
+import { bindAutoSubmit, initDatepickers, initSelect2 } from './form-plugins';
 
 import.meta.glob(['../assets/img/**', '../assets/vendor/fonts/**']);
 
@@ -77,3 +78,6 @@ function initTooltips() {
 showFlashMessages();
 bindConfirmForms();
 initTooltips();
+initSelect2();
+initDatepickers();
+bindAutoSubmit();
