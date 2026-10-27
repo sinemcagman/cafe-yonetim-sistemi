@@ -31,6 +31,28 @@
   fill: var(--demlio-text);
 }
 
+/* Sağ üst navbar: tüm kontroller aynı yükseklikte (38px), eşit aralıkla ve dikeyde ortalı */
+.demlio-navbar-actions > .nav-item > .btn,
+.demlio-navbar-actions > .nav-item > .nav-link.btn-icon {
+  height: 38px;
+  min-width: 38px;
+  padding-block: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demlio-navbar-actions .demlio-navbar-avatar {
+  width: 38px;
+  height: 38px;
+}
+
+/* Bildirim noktası zil ikonunun köşesine otursun, hizayı bozmasın */
+.demlio-navbar-actions .badge-notifications {
+  top: -2px;
+  inset-inline-end: -2px;
+}
+
 /* Yan menüdeki marka alanı: simge ve yazı aynı hizada */
 .app-brand-logo.demo {
   width: auto;
