@@ -1,0 +1,45 @@
+{
+  "menu": [
+    {
+      "route": "dashboard",
+      "name": "Panel",
+      "icon": "menu-icon icon-base ti tabler-smart-home",
+      "slug": "dashboard"
+    },
+    {
+      "menuHeader": "Salon"
+    },
+    {
+      "route": "tables.index",
+      "name": "Masalar",
+      "icon": "menu-icon icon-base ti tabler-armchair",
+      "slug": "tables.*"
+    },
+    {
+      "menuHeader": "Menü Yönetimi",
+      "roles": ["yonetici"]
+    },
+    {
+      "route": "categories.index",
+      "name": "Kategoriler",
+      "icon": "menu-icon icon-base ti tabler-category",
+      "slug": "categories.*",
+      "roles": ["yonetici"]
+    },
+    {
+      "route": "products.index",
+      "name": "Ürünler",
+      "icon": "menu-icon icon-base ti tabler-coffee",
+      "slug": "products.*",
+      "roles": ["yonetici"],
+      "badgeKey": "lowStock"
+    },
+    {
+      "route": "stock-movements.index",
+      "name": "Stok Hareketleri",
+      "icon": "menu-icon icon-base ti tabler-arrows-exchange",
+      "slug": "stock-movements.*",
+      "roles": ["yonetici"]
+    }
+  ]
+}
