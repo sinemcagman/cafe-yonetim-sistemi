@@ -8,7 +8,7 @@
         <div class="col-lg-5">
           <a href="javascript:;" class="app-brand-link mb-6">
             <span class="app-brand-logo demo">@include('_partials.macros')</span>
-            <span class="app-brand-text demo text-white fw-bold ms-2 ps-1">{{ config('variables.templateName') }}</span>
+            <span class="app-brand-text demo ms-2">@include('_partials.wordmark', ['height' => 22])</span>
           </a>
           <p class="footer-text footer-logo-description mb-6">Most developer friendly & highly customisable
             Admin

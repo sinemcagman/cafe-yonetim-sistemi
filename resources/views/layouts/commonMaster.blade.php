@@ -51,7 +51,9 @@
   <!-- laravel CRUD token -->
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+  <link rel="icon" type="image/svg+xml" href="{{ asset('assets/img/branding/demlio-icon.svg') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/branding/favicon.ico') }}" sizes="any" />
+  <link rel="apple-touch-icon" href="{{ asset('assets/img/branding/apple-touch-icon.png') }}" />
 
   <!-- Include Styles -->
   <!-- $isFront is used to append the front layout styles only on the front layout otherwise the variable will be blank -->

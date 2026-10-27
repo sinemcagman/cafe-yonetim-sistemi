@@ -20,8 +20,8 @@ $demoAccounts = [
 <div class="authentication-wrapper authentication-cover">
   <!-- Logo -->
   <a href="{{ route('login') }}" class="app-brand auth-cover-brand">
-    <span class="app-brand-logo demo">@include('_partials.macros')</span>
-    <span class="app-brand-text demo text-heading fw-bold">{{ config('variables.templateName') }}</span>
+    <span class="app-brand-logo demo">@include('_partials.macros', ['height' => 34])</span>
+    <span class="app-brand-text demo ms-2">@include('_partials.wordmark', ['height' => 24])</span>
   </a>
   <!-- /Logo -->
   <div class="authentication-inner row m-0">
