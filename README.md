@@ -45,3 +45,52 @@ Kasiyer mesai başında kasa oturumu açıp başlangıçtaki nakit tutarını gi
 - **Backend:** PHP ve Laravel
 - **Veritabanı:** MySQL
 - **Bağımlılık yönetimi:** Composer
+- **Arayüz:** Gxon Bootstrap 5 admin template (`public/assets`)
+
+## Kurulum
+
+Gereksinimler: PHP 8.4+, Composer, MySQL 8.
+
+```bash
+git clone https://github.com/sinemcagman/cafe-yonetim-sistemi.git
+cd cafe-yonetim-sistemi
+composer install
+cp .env.example .env
+php artisan key:generate
+```
+
+MySQL'de `kafe_yonetim` adında bir veritabanı oluşturun ve `.env` içindeki `DB_*` bilgilerini düzenleyin. Ardından tabloları ve örnek verileri yükleyin:
+
+```bash
+php artisan migrate --seed
+php artisan serve
+```
+
+Uygulama `http://127.0.0.1:8000` adresinde açılır. Örnek hesapların şifresi `password`'dür:
+
+| Rol | E-posta |
+| --- | --- |
+| Yönetici | yonetici@kafe.test |
+| Garson | garson@kafe.test |
+| Kasiyer | kasiyer@kafe.test |
+
+Testleri çalıştırmak için: `php artisan test`
+
+## Geliştirme durumu
+
+**Tamamlananlar**
+
+- Veritabanı şeması: kategori, ürün, masa, sipariş, sipariş kalemi, stok hareketi, kasa oturumu, ödeme, kasa hareketi ve işlem geçmişi tabloları
+- Çalışan girişi, pasif hesap kontrolü ve rol bazlı yetkilendirme (Yönetici / Garson / Kasiyer)
+- Menü yönetimi: kategoriler ve ürünler (fiyat, adet, satış durumu)
+- Stok girişi ve düzeltmesi; her değişiklik nedeniyle birlikte stok hareketine kaydedilir
+- Masa tanımlama ve çalışanlar için boş/dolu masa ekranı
+- Panel: masa durumu, açık sipariş, günlük tahsilat, kritik stok ve son işlemler
+
+**Sıradakiler**
+
+- Masa, paket ve gel-al siparişi açma; ürün ekleme ve kalem iptali
+- Sipariş hazırlık durumlarının takibi
+- Ödeme alma ve hesabı kapatma
+- Kasa oturumu açma/kapama ve kasa hareketleri
+- Çalışan yönetimi ve işlem geçmişi ekranı
