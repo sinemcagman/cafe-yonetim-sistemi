@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/assets/img/branding/demlio-logo.png" alt="Demlio" height="96">
+</p>
+
 # Demlio — Kafe Yönetim Sistemi
 
 Demlio, PHP Laravel ve MySQL tabanlı bir kafe yönetim sistemidir. Masa ve paket siparişleri, menü, ürün adedi, ödeme ve kasa işlemleri aynı akış içinde yönetilir.
