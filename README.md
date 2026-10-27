@@ -1,6 +1,6 @@
-# Kafe Yönetim Sistemi
+# Demlio — Kafe Yönetim Sistemi
 
-PHP Laravel ve MySQL tabanlı kafe yönetim sistemi. Masa ve paket siparişleri, menü, ürün adedi, ödeme ve kasa işlemleri aynı akış içinde yönetilir.
+Demlio, PHP Laravel ve MySQL tabanlı bir kafe yönetim sistemidir. Masa ve paket siparişleri, menü, ürün adedi, ödeme ve kasa işlemleri aynı akış içinde yönetilir.
 
 ## Kafe İş Akışı
 
@@ -42,48 +42,80 @@ Kasiyer mesai başında kasa oturumu açıp başlangıçtaki nakit tutarını gi
 
 ## Teknik altyapı
 
-- **Backend:** PHP ve Laravel
-- **Veritabanı:** MySQL
-- **Bağımlılık yönetimi:** Composer
-- **Arayüz:** Gxon Bootstrap 5 admin template (`public/assets`)
+- **Backend:** PHP 8.4 ve Laravel 13
+- **Veritabanı:** MySQL 8 (geliştirme, test ve canlı ortamda yalnızca MySQL kullanılır)
+- **Bağımlılık yönetimi:** Composer ve Yarn
+- **Arayüz:** Vuexy Bootstrap 5 admin teması (Laravel sürümü, Vite ile derlenir)
 
 ## Kurulum
 
-Gereksinimler: PHP 8.4+, Composer, MySQL 8.
+Gereksinimler: PHP 8.4+, Composer, MySQL 8, Node.js 20+ ve Yarn.
 
 ```bash
 git clone https://github.com/sinemcagman/cafe-yonetim-sistemi.git
 cd cafe-yonetim-sistemi
 composer install
+yarn install
 cp .env.example .env
 php artisan key:generate
 ```
 
-MySQL'de `kafe_yonetim` adında bir veritabanı oluşturun ve `.env` içindeki `DB_*` bilgilerini düzenleyin. Ardından tabloları ve örnek verileri yükleyin:
+MySQL'de `kafe_yonetim` adında bir veritabanı oluşturun (`utf8mb4_unicode_ci`) ve `.env` içindeki `DB_*` bilgilerini düzenleyin. Ardından arayüz dosyalarını derleyin, tabloları ve örnek verileri yükleyin:
 
 ```bash
+yarn build
 php artisan migrate --seed
 php artisan serve
 ```
 
+Arayüz üzerinde çalışırken `yarn build` yerine `yarn dev` kullanılabilir.
+
 Uygulama `http://127.0.0.1:8000` adresinde açılır. Örnek hesapların şifresi `password`'dür:
 
-| Rol | E-posta |
-| --- | --- |
-| Yönetici | yonetici@kafe.test |
-| Garson | garson@kafe.test |
-| Kasiyer | kasiyer@kafe.test |
+| Rol | Ad | E-posta |
+| --- | --- | --- |
+| Yönetici | Selin Aydın | yonetici@kafe.test |
+| Garson | Ayşe Demir | garson@kafe.test |
+| Kasiyer | Mehmet Kaya | kasiyer@kafe.test |
 
-Testleri çalıştırmak için: `php artisan test`
+### Testler
+
+Testler MySQL üzerinde, ayrı bir test veritabanında çalışır. Önce `kafe_yonetim_test` veritabanını oluşturun, sonra:
+
+```bash
+php artisan test
+```
+
+## Veritabanı nesneleri
+
+Tablolara ek olarak migration'larla şu MySQL nesneleri oluşturulur:
+
+| Tür | Ad | Görevi |
+| --- | --- | --- |
+| Function | `fn_stok_durumu(adet, kritik_esik)` | Ürünün stok durumunu `tukendi`, `kritik` veya `yeterli` olarak döner |
+| View | `v_urun_stok_durumu` | Ürün, kategori, adet, stok değeri ve stok durumunu tek tabloda listeler |
+| Trigger | `trg_order_items_after_insert / update / delete` | Sipariş kalemi eklenince, iptal edilince ya da silinince sipariş toplamını yeniden hesaplar |
+| Stored procedure | `sp_gunluk_kasa_raporu(tarih)` | Verilen günün tahsilatlarını ödeme yöntemine göre özetler |
+
+```sql
+SELECT * FROM v_urun_stok_durumu WHERE stok_durumu <> 'yeterli';
+CALL sp_gunluk_kasa_raporu('2026-10-28');
+```
+
+## Arayüz kuralları
+
+Tüm ekranlar Vuexy bileşenleriyle hazırlanır: seçim kutuları Select2, tarih alanları flatpickr, listeler sayfalı. Ayrıntılar için [docs/arayuz-kurallari.md](docs/arayuz-kurallari.md).
 
 ## Geliştirme durumu
 
 **Tamamlananlar**
 
 - Veritabanı şeması: kategori, ürün, masa, sipariş, sipariş kalemi, stok hareketi, kasa oturumu, ödeme, kasa hareketi ve işlem geçmişi tabloları
+- Stok durumu fonksiyonu ve görünümü, sipariş toplamı trigger'ları, günlük kasa raporu prosedürü
 - Çalışan girişi, pasif hesap kontrolü ve rol bazlı yetkilendirme (Yönetici / Garson / Kasiyer)
-- Menü yönetimi: kategoriler ve ürünler (fiyat, adet, satış durumu)
-- Stok girişi ve düzeltmesi; her değişiklik nedeniyle birlikte stok hareketine kaydedilir
+- Vuexy arayüzü: kafe renk paleti, açık/koyu tema, role göre menü, kritik stok bildirimleri
+- Menü yönetimi: kategoriler (tüm Tabler ikonlarından aranabilir ikon seçimi) ve ürünler (fiyat, adet, satış durumu)
+- Stok girişi ve düzeltmesi; her değişiklik nedeniyle birlikte stok hareketine kaydedilir, tarih aralığıyla filtrelenebilir
 - Masa tanımlama ve çalışanlar için boş/dolu masa ekranı
 - Panel: masa durumu, açık sipariş, günlük tahsilat, kritik stok ve son işlemler
 
