@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StockMovementController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -19,5 +21,13 @@ Route::middleware('auth')->group(function () {
             ->except('show')
             ->parameters(['kategoriler' => 'category'])
             ->names('categories');
+
+        Route::resource('urunler', ProductController::class)
+            ->except('show')
+            ->parameters(['urunler' => 'product'])
+            ->names('products');
+
+        Route::get('stok-hareketleri', [StockMovementController::class, 'index'])->name('stock-movements.index');
+        Route::post('urunler/{product}/stok', [StockMovementController::class, 'store'])->name('products.stock');
     });
 });
