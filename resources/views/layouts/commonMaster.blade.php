@@ -51,8 +51,9 @@
   <!-- laravel CRUD token -->
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="{{ asset('assets/img/branding/demlio-icon.svg') }}" />
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/branding/favicon.ico') }}" sizes="any" />
+  {{-- SVG favicon tarayıcının açık/koyu temasına göre renk değiştirir (prefers-color-scheme); ICO eski tarayıcılar için --}}
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/branding/favicon.ico') }}" sizes="32x32" />
+  <link rel="icon" type="image/svg+xml" href="{{ asset('assets/img/branding/favicon.svg') }}?v=2" />
   <link rel="apple-touch-icon" href="{{ asset('assets/img/branding/apple-touch-icon.png') }}" />
 
   <!-- Include Styles -->

@@ -32,10 +32,10 @@ use Illuminate\Support\Facades\Auth;
     </div>
   </div>
 
-  <ul class="navbar-nav flex-row align-items-center gap-1 gap-sm-2 ms-auto">
+  <ul class="navbar-nav flex-row align-items-center gap-2 ms-auto demlio-navbar-actions">
     @auth
     <!-- Hızlı erişim: Masalar -->
-    <li class="nav-item d-flex align-items-center me-1 me-sm-2">
+    <li class="nav-item d-flex align-items-center">
       <a href="{{ route('tables.index') }}" class="btn btn-label-primary d-flex align-items-center gap-1 px-3" style="height: 38px">
         <i class="icon-base ti tabler-armchair icon-18px"></i>
         <span class="d-none d-sm-inline">Masalar</span>
@@ -142,10 +142,10 @@ use Illuminate\Support\Facades\Auth;
 
     @auth
     <!-- User -->
-    <li class="nav-item navbar-dropdown dropdown-user dropdown d-flex align-items-center ms-1">
+    <li class="nav-item navbar-dropdown dropdown-user dropdown d-flex align-items-center">
       <a class="nav-link dropdown-toggle hide-arrow p-0 d-flex align-items-center" href="javascript:void(0);" data-bs-toggle="dropdown"
         aria-label="Hesap menüsü">
-        <div class="avatar avatar-online">
+        <div class="avatar avatar-online demlio-navbar-avatar">
           <span class="avatar-initial rounded-circle bg-label-{{ Auth::user()->role->color() }}">{{ Auth::user()->initials() }}</span>
         </div>
       </a>
