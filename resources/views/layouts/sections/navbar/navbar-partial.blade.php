@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4 ms-0">
   <a href="{{ route('dashboard') }}" class="app-brand-link">
     <span class="app-brand-logo demo">@include('_partials.macros')</span>
-    <span class="app-brand-text demo menu-text fw-bold">{{ config('variables.templateName') }}</span>
+    <span class="app-brand-text demo ms-2">@include('_partials.wordmark', ['height' => 22])</span>
   </a>
 </div>
 @endif

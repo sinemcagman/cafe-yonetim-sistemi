@@ -1,0 +1,38 @@
+/* Demlio logo renkleri (resources/views/_partials/macros ve wordmark) */
+:root,
+[data-bs-theme='light'] {
+  --demlio-cup: #784c31;
+  --demlio-steam: #b27443;
+  --demlio-text: #71462d;
+}
+
+[data-bs-theme='dark'] {
+  --demlio-cup: #f4eadf;
+  --demlio-steam: #c58b5a;
+  --demlio-text: #f4eadf;
+}
+
+.demlio-mark,
+.demlio-wordmark {
+  display: block;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.demlio-mark-cup {
+  fill: var(--demlio-cup);
+}
+
+.demlio-mark-steam {
+  fill: var(--demlio-steam);
+}
+
+.demlio-wordmark path {
+  fill: var(--demlio-text);
+}
+
+/* Yan menüdeki marka alanı: simge ve yazı aynı hizada */
+.app-brand-logo.demo {
+  width: auto;
+  height: auto;
+}
