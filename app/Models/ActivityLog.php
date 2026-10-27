@@ -34,6 +34,21 @@ class ActivityLog extends Model
     }
 
     /**
+     * Arayüzde işlemi renklendirmek için Bootstrap renk adı döner.
+     */
+    public function color(): string
+    {
+        return match (true) {
+            str_ends_with($this->action, '_eklendi') => 'success',
+            str_ends_with($this->action, '_silindi') => 'danger',
+            str_starts_with($this->action, 'stok_') => 'warning',
+            str_ends_with($this->action, '_guncellendi') => 'info',
+            $this->action === 'giris' => 'primary',
+            default => 'secondary',
+        };
+    }
+
+    /**
      * İşlem geçmişine yeni bir kayıt ekler.
      *
      * @param  array<string, mixed>  $properties
