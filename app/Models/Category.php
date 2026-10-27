@@ -13,6 +13,40 @@ class Category extends Model
 {
     use HasFactory;
 
+    public const DEFAULT_ICON = 'tabler-tools-kitchen-2';
+
+    /**
+     * İkon seçicide "Önerilenler" başlığıyla en üstte gösterilen kafe ikonları.
+     * Bunların dışında tüm Tabler ikonları da seçilebilir (bkz. App\Support\TablerIcons).
+     *
+     * @var array<string, string>
+     */
+    public const SUGGESTED_ICONS = [
+        'tabler-coffee' => 'Sıcak içecek',
+        'tabler-cup' => 'Bardak',
+        'tabler-glass-full' => 'Soğuk içecek',
+        'tabler-bottle' => 'Şişe',
+        'tabler-baguette' => 'Unlu mamul',
+        'tabler-bread' => 'Ekmek',
+        'tabler-egg' => 'Kahvaltı',
+        'tabler-salad' => 'Salata',
+        'tabler-soup' => 'Çorba',
+        'tabler-pizza' => 'Pizza',
+        'tabler-cake' => 'Tatlı',
+        'tabler-ice-cream' => 'Dondurma',
+        'tabler-cookie' => 'Kurabiye',
+        'tabler-leaf' => 'Bitki çayı',
+        'tabler-tools-kitchen-2' => 'Genel',
+    ];
+
+    public function iconClass(): string
+    {
+        // İkon kayıt sırasında doğrulanır; burada yalnızca beklenen biçimde olup olmadığına bakılır
+        $icon = (string) $this->icon;
+
+        return 'icon-base ti '.(preg_match('/^tabler-[a-z0-9-]+$/', $icon) ? $icon : self::DEFAULT_ICON);
+    }
+
     protected function casts(): array
     {
         return [

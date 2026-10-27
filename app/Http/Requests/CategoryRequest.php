@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Support\TablerIcons;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,7 +21,11 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100', Rule::unique('categories')->ignore($this->route('category'))],
-            'icon' => ['nullable', 'string', 'max:50'],
+            'icon' => ['nullable', 'string', 'max:60', function (string $attribute, mixed $value, Closure $fail) {
+                if (! TablerIcons::exists($value)) {
+                    $fail('Seçilen ikon bulunamadı.');
+                }
+            }],
             'sort_order' => ['required', 'integer', 'min:0', 'max:999'],
             'is_active' => ['boolean'],
         ];
