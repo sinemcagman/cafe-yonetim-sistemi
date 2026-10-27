@@ -16,6 +16,29 @@
               <span class="menu-label">Panel</span>
             </a>
           </li>
+          @if (auth()->user()->isManager())
+            <li class="menu-heading">
+              <span class="menu-label">Menü Yönetimi</span>
+            </li>
+            <li class="menu-item">
+              <a @class(['menu-link', 'active' => request()->routeIs('categories.*')]) href="{{ route('categories.index') }}">
+                <i class="fi fi-rr-list"></i>
+                <span class="menu-label">Kategoriler</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a @class(['menu-link', 'active' => request()->routeIs('products.*')]) href="{{ route('products.index') }}">
+                <i class="fi fi-rr-mug-hot-alt"></i>
+                <span class="menu-label">Ürünler</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a @class(['menu-link', 'active' => request()->routeIs('stock-movements.*')]) href="{{ route('stock-movements.index') }}">
+                <i class="fi fi-rr-boxes"></i>
+                <span class="menu-label">Stok Hareketleri</span>
+              </a>
+            </li>
+          @endif
         </ul>
       </nav>
     </aside>
