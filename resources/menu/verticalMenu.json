@@ -25,6 +25,15 @@
       "badgeTitle": "Açık sipariş sayısı"
     },
     {
+      "route": "preparation.index",
+      "name": "Hazırlık",
+      "icon": "menu-icon icon-base ti tabler-chef-hat",
+      "slug": "preparation.*",
+      "badgeKey": "inPreparation",
+      "badgeColor": "warning",
+      "badgeTitle": "Hazırlık bekleyen sipariş sayısı"
+    },
+    {
       "menuHeader": "Menü Yönetimi",
       "roles": [
         "yonetici"

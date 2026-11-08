@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\View;
@@ -63,6 +64,7 @@ class MenuServiceProvider extends ServiceProvider
         return $this->badgeCounts[$key] ??= match ($key) {
             'lowStock' => Product::active()->lowStock()->count(),
             'openOrders' => Order::open()->count(),
+            'inPreparation' => Order::whereIn('status', [OrderStatus::Yeni, OrderStatus::Hazirlaniyor])->count(),
             default => 0,
         };
     }
