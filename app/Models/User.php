@@ -60,6 +60,14 @@ class User extends Authenticatable
         return $this->hasRole(UserRole::Yonetici, UserRole::Garson);
     }
 
+    /**
+     * Ödeme alabilir ve kasa işlemleri yapabilir mi? (kasiyer ve yönetici)
+     */
+    public function canHandlePayments(): bool
+    {
+        return $this->hasRole(UserRole::Yonetici, UserRole::Kasiyer);
+    }
+
     public function initials(): string
     {
         return collect(explode(' ', trim($this->name)))

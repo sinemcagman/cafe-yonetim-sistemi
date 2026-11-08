@@ -38,15 +38,8 @@ class ProductRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $price = trim((string) $this->input('price'));
-
-        // Türkçe yazım: "1.250,50" → "1250.50"
-        if (str_contains($price, ',')) {
-            $price = str_replace(['.', ','], ['', '.'], $price);
-        }
-
         $this->merge([
-            'price' => $price,
+            'price' => normalize_amount($this->input('price')),
             'is_active' => $this->boolean('is_active'),
         ]);
     }

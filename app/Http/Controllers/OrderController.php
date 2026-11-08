@@ -9,6 +9,7 @@ use App\Http\Requests\OpenOrderRequest;
 use App\Models\Category;
 use App\Models\DiningTable;
 use App\Models\Order;
+use App\Services\CashService;
 use App\Services\OrderService;
 use DomainException;
 use Illuminate\Http\RedirectResponse;
@@ -17,8 +18,10 @@ use Illuminate\View\View;
 
 class OrderController extends Controller
 {
-    public function __construct(private readonly OrderService $orders)
-    {
+    public function __construct(
+        private readonly OrderService $orders,
+        private readonly CashService $cash,
+    ) {
     }
 
     /**
@@ -100,6 +103,7 @@ class OrderController extends Controller
 
         return view('orders.show', [
             'order' => $order,
+            'cashSession' => $this->cash->currentSession(),
             'categories' => Category::query()
                 ->active()
                 ->ordered()

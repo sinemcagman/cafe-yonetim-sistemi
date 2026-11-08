@@ -120,6 +120,19 @@
     </div>
   </div>
 </div>
+
+@if ($order->isOpen() && auth()->user()->canHandlePayments())
+  @include('orders._payment-panel')
+
+  @if ($errors->hasAny(['amount', 'method']) || (session('error') && old('amount') !== null))
+    @push('scripts')
+    <script>
+      // Ödeme hatalıysa paneli girilen değerlerle tekrar aç
+      document.addEventListener('DOMContentLoaded', () => bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('paymentPanel')).show());
+    </script>
+    @endpush
+  @endif
+@endif
 @endsection
 
 @if ($editable)

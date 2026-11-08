@@ -31,6 +31,31 @@
             "badgeTitle": "Hazırlık bekleyen sipariş sayısı"
         },
         {
+            "route": "cash.index",
+            "name": "Kasa",
+            "icon": "menu-icon icon-base ti tabler-cash-register",
+            "slug": [
+                "cash.index"
+            ],
+            "roles": [
+                "yonetici",
+                "kasiyer"
+            ]
+        },
+        {
+            "route": "cash.history",
+            "name": "Kasa Geçmişi",
+            "icon": "menu-icon icon-base ti tabler-history",
+            "slug": [
+                "cash.history",
+                "cash.sessions.*"
+            ],
+            "roles": [
+                "yonetici",
+                "kasiyer"
+            ]
+        },
+        {
             "route": "categories.index",
             "name": "Kategoriler",
             "icon": "menu-icon icon-base ti tabler-category",

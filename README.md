@@ -124,9 +124,8 @@ Tüm ekranlar Vuexy bileşenleriyle hazırlanır: seçim kutuları Select2, tari
 - Panel: masa durumu, açık sipariş, günlük tahsilat, kritik stok ve son işlemler
 - Siparişler: masa, paket ve gel-al siparişi açma; menüden dokunarak ürün ekleme, güncel fiyatın siparişe aktarılması, stoktan otomatik düşme, yetersiz stok uyarısı, nedenli kalem iptali ve stoğun geri eklenmesi, sipariş notu, sipariş geçmişi
 - Hazırlık ekranı: yeni / hazırlanıyor / hazır sütunlu, 15 saniyede bir kendini yenileyen pano; bekleme süresine göre renk, sonradan eklenen kalemlerin işaretlenmesi, sesli yeni sipariş uyarısı, tam ekran; hazırlanmış siparişe ürün eklenince sipariş yeniden sıraya girer
+- Kasa ve ödeme: kasa oturumu açma (başlangıç nakdi), nakit/kart ödeme, bölünmüş hesap, para üstü hesabı, tamamı ödenince siparişin kapanıp masanın boşalması, elle kasa girişi/çıkışı, kapanışta sayılan ve beklenen nakdin karşılaştırılması, kasa geçmişi ve `sp_gunluk_kasa_raporu` ile günlük rapor
 
 **Sıradakiler**
 
-- Ödeme alma ve hesabı kapatma
-- Kasa oturumu açma/kapama ve kasa hareketleri
 - Çalışan yönetimi ve işlem geçmişi ekranı

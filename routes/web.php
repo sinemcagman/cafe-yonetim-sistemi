@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CashController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiningTableController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\OrderStatusController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PreparationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StockMovementController;
@@ -37,6 +39,18 @@ Route::middleware('auth')->group(function () {
         Route::post('siparisler/{order}/kalemler', [OrderItemController::class, 'store'])->name('orders.items.store');
         Route::post('siparisler/{order}/kalemler/{item}/iptal', [OrderItemController::class, 'cancel'])->name('orders.items.cancel');
         Route::post('siparisler/{order}/durum', [OrderStatusController::class, 'advance'])->name('orders.advance');
+    });
+
+    // Kasa ve ödeme: kasiyer ve yönetici
+    Route::middleware('role:yonetici,kasiyer')->group(function () {
+        Route::post('siparisler/{order}/odemeler', [PaymentController::class, 'store'])->name('orders.payments.store');
+
+        Route::get('kasa', [CashController::class, 'index'])->name('cash.index');
+        Route::post('kasa/ac', [CashController::class, 'open'])->name('cash.open');
+        Route::post('kasa/hareket', [CashController::class, 'movement'])->name('cash.movement');
+        Route::post('kasa/kapat', [CashController::class, 'close'])->name('cash.close');
+        Route::get('kasa/gecmis', [CashController::class, 'history'])->name('cash.history');
+        Route::get('kasa/oturumlar/{session}', [CashController::class, 'show'])->name('cash.sessions.show');
     });
 
     Route::middleware('role:yonetici')->group(function () {
