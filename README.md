@@ -122,10 +122,10 @@ Tüm ekranlar Vuexy bileşenleriyle hazırlanır: seçim kutuları Select2, tari
 - Stok girişi ve düzeltmesi; her değişiklik nedeniyle birlikte stok hareketine kaydedilir, tarih aralığıyla filtrelenebilir
 - Masa tanımlama ve çalışanlar için boş/dolu masa ekranı
 - Panel: masa durumu, açık sipariş, günlük tahsilat, kritik stok ve son işlemler
+- Siparişler: masa, paket ve gel-al siparişi açma; menüden dokunarak ürün ekleme, güncel fiyatın siparişe aktarılması, stoktan otomatik düşme, yetersiz stok uyarısı, nedenli kalem iptali ve stoğun geri eklenmesi, sipariş notu, sipariş geçmişi
 
 **Sıradakiler**
 
-- Masa, paket ve gel-al siparişi açma; ürün ekleme ve kalem iptali
 - Sipariş hazırlık durumlarının takibi
 - Ödeme alma ve hesabı kapatma
 - Kasa oturumu açma/kapama ve kasa hareketleri
