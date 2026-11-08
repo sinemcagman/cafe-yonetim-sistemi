@@ -21,22 +21,18 @@
     $next = $order->status->next();
   @endphp
   <div class="card-body border-bottom py-4">
-    <div class="d-flex justify-content-between position-relative mb-1" role="list" aria-label="Hazırlık durumu">
+    <ol class="d-flex gap-1 list-unstyled mb-0" aria-label="Hazırlık durumu">
       @foreach ($steps as $index => $step)
-        <div class="text-center flex-fill" role="listitem" @if ($index === $currentIndex) aria-current="step" @endif>
+        <li class="flex-fill text-center" @if ($index === $currentIndex) aria-current="step" @endif>
           <span @class([
-              'avatar avatar-xs mx-auto mb-1',
-          ])>
-            <span @class([
-                'avatar-initial rounded-circle',
-                "bg-{$step->color()}" => $index <= $currentIndex,
-                'bg-label-secondary' => $index > $currentIndex,
-            ])><i class="icon-base ti {{ $step->icon() }} icon-12px"></i></span>
-          </span>
+              'd-block rounded-pill mb-2',
+              "bg-{$order->status->color()}" => $index <= $currentIndex,
+              'bg-label-secondary' => $index > $currentIndex,
+          ]) style="height: 6px"></span>
           <small @class(['d-block lh-sm', 'fw-medium text-heading' => $index === $currentIndex, 'text-body-secondary' => $index !== $currentIndex])>{{ $step->label() }}</small>
-        </div>
+        </li>
       @endforeach
-    </div>
+    </ol>
     @if ($editable && $next)
       <form method="POST" action="{{ route('orders.advance', $order) }}" class="mt-3">
         @csrf
