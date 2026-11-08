@@ -52,6 +52,14 @@ class User extends Authenticatable
         return $this->role === UserRole::Yonetici;
     }
 
+    /**
+     * Sipariş açabilir, ürün ekleyebilir ve kalem iptal edebilir mi? (garson ve yönetici)
+     */
+    public function canTakeOrders(): bool
+    {
+        return $this->hasRole(UserRole::Yonetici, UserRole::Garson);
+    }
+
     public function initials(): string
     {
         return collect(explode(' ', trim($this->name)))
