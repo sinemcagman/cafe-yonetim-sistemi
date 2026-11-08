@@ -15,7 +15,7 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request): View
     {
-        $tables = DiningTable::active()->orderBy('number')->get();
+        $tables = DiningTable::active()->with('openOrder')->orderBy('number')->get();
         $isManager = $request->user()->isManager();
 
         return view('dashboard', [

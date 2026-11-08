@@ -121,7 +121,7 @@
           <div class="row g-3">
             @foreach ($tables as $table)
               <div class="col-4 col-sm-3 col-lg-2">
-                <a href="{{ route('tables.index') }}#masa-{{ $table->number }}"
+                <a href="{{ $table->openOrder ? route('orders.show', $table->openOrder) : route('tables.index').'#masa-'.$table->number }}"
                   class="d-block text-center rounded-3 p-3 border {{ $table->isAvailable() ? 'bg-label-success border-success' : 'bg-label-danger border-danger' }}"
                   data-bs-toggle="tooltip" title="{{ $table->status->label() }} · {{ $table->capacity }} kişilik">
                   <i class="icon-base ti tabler-armchair icon-24px d-block mx-auto mb-1"></i>

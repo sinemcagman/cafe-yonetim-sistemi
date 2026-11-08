@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -47,7 +48,7 @@ class MenuServiceProvider extends ServiceProvider
             ->filter(fn ($item) => ! isset($item->roles) || ($user && $user->hasRole(...$item->roles)))
             ->map(function ($item) {
                 if (isset($item->badgeKey) && ($count = $this->badgeCount($item->badgeKey)) > 0) {
-                    $item->badge = ['danger', $count];
+                    $item->badge = [$item->badgeColor ?? 'danger', $count];
                 }
 
                 return $item;
@@ -61,6 +62,7 @@ class MenuServiceProvider extends ServiceProvider
     {
         return $this->badgeCounts[$key] ??= match ($key) {
             'lowStock' => Product::active()->lowStock()->count(),
+            'openOrders' => Order::open()->count(),
             default => 0,
         };
     }

@@ -76,6 +76,26 @@ class Order extends Model
         return ! in_array($this->status, [OrderStatus::Kapandi, OrderStatus::Iptal], true);
     }
 
+    /**
+     * Ekranlarda gösterilen sipariş numarası: #0012
+     */
+    public function code(): string
+    {
+        return '#'.str_pad((string) $this->getKey(), 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * "Masa 4 · #0012", "Paket #0013", "Gel-Al #0014"
+     */
+    public function label(): string
+    {
+        if ($this->type === OrderType::Masa && $this->diningTable) {
+            return "{$this->diningTable->label()} · {$this->code()}";
+        }
+
+        return "{$this->type->label()} {$this->code()}";
+    }
+
     public function remainingAmount(): float
     {
         return max(0, (float) $this->total - (float) $this->paid_total);
