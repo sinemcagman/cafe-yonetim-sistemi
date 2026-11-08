@@ -6,6 +6,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiningTableController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\OrderStatusController;
+use App\Http\Controllers\PreparationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StockMovementController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +26,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('siparisler', [OrderController::class, 'index'])->name('orders.index');
     Route::get('siparisler/{order}', [OrderController::class, 'show'])->whereNumber('order')->name('orders.show');
+    Route::get('hazirlik', [PreparationController::class, 'index'])->name('preparation.index');
 
     // Sipariş açma ve düzenleme: garson ve yönetici
     Route::middleware('role:yonetici,garson')->group(function () {
@@ -33,6 +36,7 @@ Route::middleware('auth')->group(function () {
         Route::post('siparisler/{order}/iptal', [OrderController::class, 'cancel'])->name('orders.cancel');
         Route::post('siparisler/{order}/kalemler', [OrderItemController::class, 'store'])->name('orders.items.store');
         Route::post('siparisler/{order}/kalemler/{item}/iptal', [OrderItemController::class, 'cancel'])->name('orders.items.cancel');
+        Route::post('siparisler/{order}/durum', [OrderStatusController::class, 'advance'])->name('orders.advance');
     });
 
     Route::middleware('role:yonetici')->group(function () {
