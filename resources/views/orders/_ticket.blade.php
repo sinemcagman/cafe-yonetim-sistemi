@@ -131,7 +131,34 @@
     </div>
   @endif
   <div class="d-flex justify-content-between align-items-center mt-2">
-    <h6 class="mb-0">Ödenecek</h6>
+    <h6 class="mb-0">{{ $order->isOpen() ? 'Ödenecek' : 'Kalan' }}</h6>
     <h4 class="mb-0 text-primary" data-ticket-total>{{ money($order->remainingAmount()) }}</h4>
   </div>
+
+  @php $payments = $order->payments()->with('user')->oldest('paid_at')->get(); @endphp
+  @if ($payments->isNotEmpty())
+    <ul class="list-unstyled small mt-3 mb-0 border-top pt-3">
+      @foreach ($payments as $payment)
+        <li class="d-flex justify-content-between gap-2 mb-1">
+          <span>
+            <i class="icon-base ti {{ $payment->method === \App\Enums\PaymentMethod::Nakit ? 'tabler-cash' : 'tabler-credit-card' }} icon-14px me-1"></i>
+            {{ $payment->method->label() }} · {{ $payment->user->name }} · {{ $payment->paid_at->format('H:i') }}
+          </span>
+          <span class="fw-medium text-success">{{ money($payment->amount) }}</span>
+        </li>
+      @endforeach
+    </ul>
+  @endif
+
+  @if ($order->isOpen() && auth()->user()->canHandlePayments())
+    <button type="button" class="btn btn-primary w-100 mt-4" data-bs-toggle="offcanvas" data-bs-target="#paymentPanel"
+      @disabled($order->remainingAmount() <= 0)>
+      <i class="icon-base ti tabler-cash-register icon-18px me-1"></i> Ödeme Al
+    </button>
+  @elseif (! $order->isOpen())
+    <div class="alert alert-{{ $order->status->color() }} d-flex align-items-center gap-2 mt-4 mb-0 py-2">
+      <i class="icon-base ti {{ $order->status->icon() }} icon-18px"></i>
+      <span>{{ $order->status->label() }} · {{ $order->closed_at?->format('d.m.Y H:i') }}</span>
+    </div>
+  @endif
 </div>
