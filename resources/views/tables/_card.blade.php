@@ -43,7 +43,7 @@
         @if (! $table->is_active)
           <span class="badge bg-label-secondary">Pasif</span>
         @elseif ($table->openOrder)
-          <div class="bg-label-danger rounded p-2 small">
+          <div class="bg-label-danger rounded p-2 small mb-3">
             <div class="d-flex justify-content-between">
               <span>Hesap</span><strong>{{ money($table->openOrder->total) }}</strong>
             </div>
@@ -52,8 +52,19 @@
               <span class="text-truncate ms-2">{{ $table->openOrder->user->name }}</span>
             </div>
           </div>
+          <a href="{{ route('orders.show', $table->openOrder) }}" class="btn btn-sm btn-danger w-100">
+            <i class="icon-base ti tabler-receipt icon-14px me-1"></i> Siparişe Git
+          </a>
         @else
-          <x-status-badge :status="$table->status" />
+          <x-status-badge :status="$table->status" class="mb-3" />
+          @if (auth()->user()->canTakeOrders())
+            <form method="POST" action="{{ route('tables.open-order', $table) }}">
+              @csrf
+              <button type="submit" class="btn btn-sm btn-success w-100">
+                <i class="icon-base ti tabler-plus icon-14px me-1"></i> Sipariş Aç
+              </button>
+            </form>
+          @endif
         @endif
       </div>
     </div>
