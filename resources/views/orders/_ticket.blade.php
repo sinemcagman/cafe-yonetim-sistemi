@@ -13,6 +13,42 @@
   <x-status-badge :status="$order->status" />
 </div>
 
+@if ($order->isOpen())
+  {{-- Hazırlık adımları: yeni → hazırlanıyor → hazır → teslim edildi --}}
+  @php
+    $steps = [\App\Enums\OrderStatus::Yeni, \App\Enums\OrderStatus::Hazirlaniyor, \App\Enums\OrderStatus::Hazir, \App\Enums\OrderStatus::TeslimEdildi];
+    $currentIndex = array_search($order->status, $steps, true);
+    $next = $order->status->next();
+  @endphp
+  <div class="card-body border-bottom py-4">
+    <div class="d-flex justify-content-between position-relative mb-1" role="list" aria-label="Hazırlık durumu">
+      @foreach ($steps as $index => $step)
+        <div class="text-center flex-fill" role="listitem" @if ($index === $currentIndex) aria-current="step" @endif>
+          <span @class([
+              'avatar avatar-xs mx-auto mb-1',
+          ])>
+            <span @class([
+                'avatar-initial rounded-circle',
+                "bg-{$step->color()}" => $index <= $currentIndex,
+                'bg-label-secondary' => $index > $currentIndex,
+            ])><i class="icon-base ti {{ $step->icon() }} icon-12px"></i></span>
+          </span>
+          <small @class(['d-block lh-sm', 'fw-medium text-heading' => $index === $currentIndex, 'text-body-secondary' => $index !== $currentIndex])>{{ $step->label() }}</small>
+        </div>
+      @endforeach
+    </div>
+    @if ($editable && $next)
+      <form method="POST" action="{{ route('orders.advance', $order) }}" class="mt-3">
+        @csrf
+        <input type="hidden" name="from" value="{{ $order->status->value }}">
+        <button type="submit" class="btn btn-sm btn-{{ $next->color() }} w-100" @disabled($activeItems->isEmpty())>
+          <i class="icon-base ti {{ $next->icon() }} icon-16px me-1"></i> {{ $next->actionLabel() }}
+        </button>
+      </form>
+    @endif
+  </div>
+@endif
+
 <div class="card-body pt-4">
   @if ($activeItems->isEmpty())
     <div class="text-center py-6">
