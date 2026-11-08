@@ -84,6 +84,24 @@
             "roles": [
                 "yonetici"
             ]
+        },
+        {
+            "route": "users.index",
+            "name": "Çalışanlar",
+            "icon": "menu-icon icon-base ti tabler-users",
+            "slug": "users.*",
+            "roles": [
+                "yonetici"
+            ]
+        },
+        {
+            "route": "activity-logs.index",
+            "name": "İşlem Geçmişi",
+            "icon": "menu-icon icon-base ti tabler-history-toggle",
+            "slug": "activity-logs.*",
+            "roles": [
+                "yonetici"
+            ]
         }
     ]
 }

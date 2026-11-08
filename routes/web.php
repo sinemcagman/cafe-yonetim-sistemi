@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CashController;
 use App\Http\Controllers\CategoryController;
@@ -11,7 +12,9 @@ use App\Http\Controllers\OrderStatusController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PreparationController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StockMovementController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -23,6 +26,10 @@ Route::middleware('auth')->group(function () {
     Route::post('cikis', [LoginController::class, 'destroy'])->name('logout');
 
     Route::get('/', DashboardController::class)->name('dashboard');
+
+    Route::get('profilim', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profilim', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profilim/sifre', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
     Route::get('masalar', [DiningTableController::class, 'index'])->name('tables.index');
 
@@ -68,6 +75,13 @@ Route::middleware('auth')->group(function () {
             ->except('show')
             ->parameters(['urunler' => 'product'])
             ->names('products');
+
+        Route::resource('calisanlar', UserController::class)
+            ->except('show')
+            ->parameters(['calisanlar' => 'user'])
+            ->names('users');
+
+        Route::get('islem-gecmisi', [ActivityLogController::class, 'index'])->name('activity-logs.index');
 
         Route::get('stok-hareketleri', [StockMovementController::class, 'index'])->name('stock-movements.index');
         Route::post('urunler/{product}/stok', [StockMovementController::class, 'store'])->name('products.stock');

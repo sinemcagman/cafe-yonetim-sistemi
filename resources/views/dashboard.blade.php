@@ -176,9 +176,12 @@
   <!-- Son işlemler -->
   <div class="col-xxl-12 col-md-6">
     <div class="card h-100">
-      <div class="card-header">
-        <h5 class="card-title mb-1">Son İşlemler</h5>
-        <p class="card-subtitle mb-0">Çalışanların sistemde yaptığı son değişiklikler</p>
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="card-title mb-1">Son İşlemler</h5>
+          <p class="card-subtitle mb-0">Çalışanların sistemde yaptığı son değişiklikler</p>
+        </div>
+        <a href="{{ route('activity-logs.index') }}" class="btn btn-sm btn-label-primary">Tümü</a>
       </div>
       <div class="card-body pt-2">
         @if ($recentActivities->isEmpty())
