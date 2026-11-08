@@ -12,13 +12,22 @@ if (! function_exists('money')) {
 
 if (! function_exists('normalize_amount')) {
     /**
-     * Formdan gelen tutarı doğrulanabilir hale getirir: "1.250,50" → "1250.50", "15,5" → "15.5".
-     * Virgül yoksa değer olduğu gibi döner (ör. "15.50").
+     * Formdan gelen tutarı doğrulanabilir hale getirir:
+     * "1.250,50" → "1250.50", "15,5" → "15.5", "1.000" → "1000" (Türkçe binlik ayırıcı), "15.50" → "15.50".
      */
     function normalize_amount(mixed $value): string
     {
-        $value = trim((string) $value);
+        $value = str_replace(' ', '', trim((string) $value));
 
-        return str_contains($value, ',') ? str_replace(['.', ','], ['', '.'], $value) : $value;
+        if (str_contains($value, ',')) {
+            return str_replace(['.', ','], ['', '.'], $value);
+        }
+
+        // Virgülsüz ve noktalar üçerli gruplar ayırıyorsa binlik ayırıcıdır: 1.000, 12.500, 1.250.000
+        if (preg_match('/^\d{1,3}(\.\d{3})+$/', $value)) {
+            return str_replace('.', '', $value);
+        }
+
+        return $value;
     }
 }

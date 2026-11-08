@@ -20,7 +20,7 @@ return [
     ],
     'boolean' => ':attribute alanı doğru veya yanlış olmalıdır.',
     'confirmed' => ':attribute tekrarı eşleşmiyor.',
-    'decimal' => ':attribute en fazla :decimal ondalık basamak içermelidir.',
+    'decimal' => ':attribute için virgülden sonra en fazla iki basamak girilebilir.',
     'email' => ':attribute geçerli bir e-posta adresi olmalıdır.',
     'enum' => 'Seçilen :attribute geçersiz.',
     'exists' => 'Seçilen :attribute geçersiz.',
