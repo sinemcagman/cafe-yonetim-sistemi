@@ -13,6 +13,15 @@
             "slug": "tables.*"
         },
         {
+            "route": "orders.index",
+            "name": "Siparişler",
+            "icon": "menu-icon icon-base ti tabler-receipt",
+            "slug": "orders.*",
+            "badgeKey": "openOrders",
+            "badgeColor": "primary",
+            "badgeTitle": "Açık sipariş sayısı"
+        },
+        {
             "route": "categories.index",
             "name": "Kategoriler",
             "icon": "menu-icon icon-base ti tabler-category",
@@ -29,7 +38,9 @@
             "roles": [
                 "yonetici"
             ],
-            "badgeKey": "lowStock"
+            "badgeKey": "lowStock",
+            "badgeColor": "danger",
+            "badgeTitle": "Kritik stoktaki ürün sayısı"
         },
         {
             "route": "stock-movements.index",
