@@ -169,6 +169,11 @@ use Illuminate\Support\Facades\Auth;
           <div class="dropdown-divider my-1 mx-n2"></div>
         </li>
         <li>
+          <a class="dropdown-item" href="{{ route('profile.edit') }}">
+            <i class="icon-base ti tabler-user-circle me-3 icon-md"></i><span class="align-middle">Profilim</span>
+          </a>
+        </li>
+        <li>
           <a class="dropdown-item" href="{{ route('dashboard') }}">
             <i class="icon-base ti tabler-smart-home me-3 icon-md"></i><span class="align-middle">Panel</span>
           </a>
