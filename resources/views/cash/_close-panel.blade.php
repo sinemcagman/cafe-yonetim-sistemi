@@ -68,7 +68,7 @@
       }
       const diff = Math.round((counted - expected) * 100) / 100;
       const text = Math.abs(diff).toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' ₺';
-      output.textContent = diff === 0 ? 'Tutuyor' : (diff > 0 ? '+' : '−') + text + (diff > 0 ? ' fazla' : ' eksik');
+      output.textContent = diff === 0 ? 'Tutuyor' : text + (diff > 0 ? ' fazla' : ' eksik');
       box.className = 'd-flex justify-content-between align-items-center rounded p-3 mb-6 ' + (diff === 0 ? 'bg-label-success' : 'bg-label-danger');
     });
     document.getElementById('cashClosePanel').addEventListener('shown.bs.offcanvas', () => input.focus());
