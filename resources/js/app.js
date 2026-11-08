@@ -8,20 +8,35 @@ import.meta.glob(['../assets/img/**', '../assets/vendor/fonts/**']);
  * Sunucudan gelen oturum mesajlarını (kaydedildi, silindi, hata...)
  * sağ üstte kısa süreli bildirim olarak gösterir.
  */
-function showFlashMessages() {
-  const messages = window.flashMessages || {};
+let notyf = null;
 
-  if (!window.Notyf || (!messages.success && !messages.error)) return;
+/**
+ * Sağ üstte kısa süreli bildirim gösterir. Sayfa script'leri de kullanır: window.notify('success', 'Kaydedildi')
+ */
+function notify(type, message) {
+  if (!window.Notyf || !message) return;
 
-  const notyf = new window.Notyf({
+  notyf ??= new window.Notyf({
     duration: 4000,
     dismissible: true,
     ripple: false,
     position: { x: 'right', y: 'top' }
   });
 
-  if (messages.success) notyf.success(messages.success);
-  if (messages.error) notyf.error({ message: messages.error, duration: 6000 });
+  if (type === 'error') {
+    notyf.error({ message, duration: 6000 });
+  } else {
+    notyf.success(message);
+  }
+}
+
+window.notify = notify;
+
+function showFlashMessages() {
+  const messages = window.flashMessages || {};
+
+  notify('success', messages.success);
+  notify('error', messages.error);
 }
 
 /**
@@ -66,6 +81,57 @@ function bindConfirmForms() {
 }
 
 /**
+ * data-prompt-reason özniteliği taşıyan formlar gönderilmeden önce neden sorar (ör. kalem iptali).
+ * Girilen metin formdaki name="reason" alanına yazılır.
+ * Örnek: <form data-prompt-reason="Kalem iptal edilsin mi?" data-prompt-placeholder="Örn. Yanlış girildi">
+ */
+function bindReasonPrompts() {
+  document.addEventListener('submit', event => {
+    const form = event.target;
+
+    if (!form.matches('form[data-prompt-reason]') || form.dataset.confirmed === 'true') return;
+
+    event.preventDefault();
+
+    const reasonInput = form.querySelector('[name=reason]');
+
+    if (!window.Swal) {
+      const reason = window.prompt(form.dataset.promptReason);
+      if (reason) {
+        reasonInput.value = reason;
+        form.dataset.confirmed = 'true';
+        form.submit();
+      }
+      return;
+    }
+
+    window.Swal.fire({
+      title: form.dataset.promptReason,
+      text: form.dataset.promptText || 'İptal nedeni işlem geçmişine kaydedilir.',
+      icon: 'warning',
+      input: 'text',
+      inputPlaceholder: form.dataset.promptPlaceholder || 'İptal nedeni',
+      inputAttributes: { maxlength: 255, 'aria-label': 'İptal nedeni' },
+      inputValidator: value => (!value || !value.trim() ? 'Lütfen bir neden yazın.' : undefined),
+      showCancelButton: true,
+      confirmButtonText: form.dataset.promptButton || 'İptal et',
+      cancelButtonText: 'Vazgeç',
+      reverseButtons: true,
+      customClass: {
+        confirmButton: 'btn btn-danger ms-2',
+        cancelButton: 'btn btn-label-secondary'
+      }
+    }).then(result => {
+      if (result.isConfirmed) {
+        reasonInput.value = result.value.trim();
+        form.dataset.confirmed = 'true';
+        form.submit();
+      }
+    });
+  });
+}
+
+/**
  * Sayfalardaki tooltip'leri etkinleştirir.
  */
 function initTooltips() {
@@ -78,6 +144,7 @@ function initTooltips() {
 
 showFlashMessages();
 bindConfirmForms();
+bindReasonPrompts();
 initTooltips();
 initSelect2();
 initDatepickers();
