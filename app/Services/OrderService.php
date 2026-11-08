@@ -43,6 +43,7 @@ class OrderService
                 'dining_table_id' => $table->id,
                 'user_id' => $user->id,
                 'status' => OrderStatus::Yeni,
+                'status_changed_at' => now(),
                 'note' => $note,
                 'opened_at' => now(),
             ]);
@@ -68,6 +69,7 @@ class OrderService
             'type' => $type,
             'user_id' => $user->id,
             'status' => OrderStatus::Yeni,
+            'status_changed_at' => now(),
             'note' => $note,
             'opened_at' => now(),
         ]);
@@ -98,6 +100,11 @@ class OrderService
 
             if ($product->stock_quantity < $quantity) {
                 throw new DomainException("{$product->name} için stokta yeterli adet yok (mevcut: {$product->stock_quantity}).");
+            }
+
+            // Hazırlanmış ya da teslim edilmiş siparişe ürün eklenirse sipariş yeniden hazırlık sırasına girer
+            if (in_array($order->status, [OrderStatus::Hazir, OrderStatus::TeslimEdildi], true)) {
+                $order->update(['status' => OrderStatus::Yeni, 'status_changed_at' => now()]);
             }
 
             $item = $order->items()->create([
@@ -173,6 +180,42 @@ class OrderService
             ActivityLog::record('siparis_iptal', "{$order->label()} iptal edildi.", $order, ['neden' => $reason]);
 
             return $order->refresh();
+        });
+    }
+
+    /**
+     * Siparişi hazırlık akışında bir sonraki adıma taşır: yeni → hazırlanıyor → hazır → teslim edildi.
+     * $expected, ekrandaki durumdur; başka biri bu arada değiştirdiyse işlem yapılmaz (çift tıklama / eşzamanlılık).
+     */
+    public function advance(Order $order, User $user, ?OrderStatus $expected = null): Order
+    {
+        return DB::transaction(function () use ($order, $user, $expected) {
+            $order = Order::query()->lockForUpdate()->findOrFail($order->getKey());
+            $this->ensureEditable($order);
+
+            if ($expected && $order->status !== $expected) {
+                throw new DomainException("{$order->label()} bu arada \"{$order->status->label()}\" durumuna alınmış; ekran yenilendi.");
+            }
+
+            $next = $order->status->next();
+
+            if (! $next) {
+                throw new DomainException("{$order->label()} hazırlık akışının sonunda.");
+            }
+
+            if ($order->status === OrderStatus::Yeni && ! $order->activeItems()->exists()) {
+                throw new DomainException("{$order->label()} siparişinde ürün yok; hazırlığa alınamaz.");
+            }
+
+            $previous = $order->status;
+            $order->update(['status' => $next, 'status_changed_at' => now()]);
+
+            ActivityLog::record('siparis_durumu', "{$order->label()}: {$previous->label()} → {$next->label()}", $order, [
+                'onceki' => $previous->value,
+                'yeni' => $next->value,
+            ]);
+
+            return $order;
         });
     }
 

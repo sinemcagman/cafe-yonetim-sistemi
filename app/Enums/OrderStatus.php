@@ -36,6 +36,55 @@ enum OrderStatus: string
     }
 
     /**
+     * Hazırlık akışındaki bir sonraki adım: yeni → hazırlanıyor → hazır → teslim edildi.
+     * Kapanış ödemeyle, iptal ayrı bir işlemle yapılır; bu yüzden onlar için null döner.
+     */
+    public function next(): ?self
+    {
+        return match ($this) {
+            self::Yeni => self::Hazirlaniyor,
+            self::Hazirlaniyor => self::Hazir,
+            self::Hazir => self::TeslimEdildi,
+            default => null,
+        };
+    }
+
+    /**
+     * Bu duruma geçirmek için gösterilen buton metni.
+     */
+    public function actionLabel(): string
+    {
+        return match ($this) {
+            self::Hazirlaniyor => 'Hazırlamaya başla',
+            self::Hazir => 'Hazır',
+            self::TeslimEdildi => 'Teslim edildi',
+            default => $this->label(),
+        };
+    }
+
+    public function icon(): string
+    {
+        return match ($this) {
+            self::Yeni => 'tabler-bell-ringing',
+            self::Hazirlaniyor => 'tabler-flame',
+            self::Hazir => 'tabler-circle-check',
+            self::TeslimEdildi => 'tabler-truck-delivery',
+            self::Kapandi => 'tabler-lock',
+            self::Iptal => 'tabler-ban',
+        };
+    }
+
+    /**
+     * Hazırlık ekranında sütun olarak gösterilen durumlar.
+     *
+     * @return array<int, self>
+     */
+    public static function preparation(): array
+    {
+        return [self::Yeni, self::Hazirlaniyor, self::Hazir];
+    }
+
+    /**
      * @return array<string, string>
      */
     public static function options(): array
