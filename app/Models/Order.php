@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 #[Fillable(['type', 'dining_table_id', 'user_id', 'status', 'status_changed_at', 'note', 'total', 'paid_total', 'opened_at', 'closed_at'])]
 class Order extends Model
@@ -95,6 +96,34 @@ class Order extends Model
         }
 
         return "{$this->type->label()} {$this->code()}";
+    }
+
+    /**
+     * Son durum değişikliğinden sonra eklenen kalemler (ör. hazırlanırken gelen "bir çay daha").
+     * Sipariş ilk açıldığından beri eklenen kalemler bu kapsamda değildir; yalnızca sonradan gelenler işaretlenir.
+     *
+     * @return Collection<int, int> kalem kimlikleri
+     */
+    public function lateItemIds(): Collection
+    {
+        if (! $this->status_changed_at) {
+            return collect();
+        }
+
+        $active = $this->items->where('status', OrderItemStatus::Aktif);
+        $hasEarlier = $active->contains(fn (OrderItem $item) => $item->created_at->lt($this->status_changed_at));
+
+        return $hasEarlier
+            ? $active->filter(fn (OrderItem $item) => $item->created_at->gte($this->status_changed_at))->pluck('id')
+            : collect();
+    }
+
+    /**
+     * Mevcut durumda geçen dakika (hazırlık ekranında bekleme rengi için).
+     */
+    public function minutesInStatus(): int
+    {
+        return (int) ($this->status_changed_at ?? $this->opened_at)->diffInMinutes(now());
     }
 
     public function remainingAmount(): float
