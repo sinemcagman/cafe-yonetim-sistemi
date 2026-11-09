@@ -1,15 +1,19 @@
-/* Demlio logo renkleri (resources/views/_partials/macros ve wordmark) */
+/* Demlio logo renkleri (resources/views/_partials/macros ve wordmark) ve grafik işaret rengi */
 :root,
 [data-bs-theme='light'] {
   --demlio-cup: #784c31;
   --demlio-steam: #b27443;
   --demlio-text: #71462d;
+  /* Tek serili grafiklerin rengi: kahveden daha doygun karamel (beyaz zeminde kontrast ve kroma denetimi geçer) */
+  --demlio-chart: #b2622a;
 }
 
 [data-bs-theme='dark'] {
   --demlio-cup: #f4eadf;
   --demlio-steam: #c58b5a;
   --demlio-text: #f4eadf;
+  /* Koyu zemin (#2c2521) için ayrı doğrulanmış ton */
+  --demlio-chart: #c97a3a;
 }
 
 .demlio-mark,
