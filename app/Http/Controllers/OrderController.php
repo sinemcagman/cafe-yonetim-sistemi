@@ -99,7 +99,7 @@ class OrderController extends Controller
      */
     public function show(Order $order): View
     {
-        $order->load(['diningTable', 'user', 'items' => fn ($q) => $q->with(['product', 'user', 'canceller'])->oldest()]);
+        $order->load(['diningTable', 'user', 'mergedInto.diningTable', 'mergedOrders.diningTable', 'items' => fn ($q) => $q->with(['product', 'user', 'canceller'])->oldest()]);
 
         return view('orders.show', [
             'order' => $order,
