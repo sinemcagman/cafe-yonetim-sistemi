@@ -44,16 +44,27 @@ class ReportController extends Controller
         }
 
         $report = ReportService::forRange($from, $to);
+        $daily = $report->dailyRevenue();
+        $topProducts = $report->topProducts();
+        $categories = $report->categoryRevenue();
+        $hourly = $report->hourlyOrders();
 
         return view('reports.index', [
             'report' => $report,
             'preset' => $preset,
             'presets' => collect($presets)->map(fn ($p) => $p[0]),
             'summary' => $report->summary(),
-            'daily' => $report->dailyRevenue(),
-            'topProducts' => $report->topProducts(),
-            'categories' => $report->categoryRevenue(),
-            'hourly' => $report->hourlyOrders(),
+            'daily' => $daily,
+            'topProducts' => $topProducts,
+            'categories' => $categories,
+            'hourly' => $hourly,
+            // Grafik verisi (resources/assets/js/demlio-reports.js): ApexCharts {x, y} biçiminde
+            'chartData' => [
+                'revenue' => $daily->map(fn ($d) => ['x' => $d['label'], 'y' => $d['total']])->values(),
+                'products' => $topProducts->map(fn ($p) => ['x' => $p->name, 'y' => $p->quantity, 'revenue' => $p->revenue])->values(),
+                'categories' => $categories->map(fn ($c) => ['x' => $c->name, 'y' => $c->revenue, 'quantity' => $c->quantity])->values(),
+                'hourly' => $hourly->map(fn ($h) => ['x' => $h['label'], 'y' => $h['orders']])->values(),
+            ],
         ]);
     }
 }
