@@ -40,7 +40,7 @@ class DiningTable extends Model
     public function openOrder(): HasOne
     {
         return $this->hasOne(Order::class)
-            ->whereNotIn('status', [OrderStatus::Kapandi, OrderStatus::Iptal])
+            ->whereNotIn('status', OrderStatus::closed())
             ->latestOfMany('opened_at');
     }
 

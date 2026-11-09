@@ -27,6 +27,16 @@
         <i class="icon-base ti tabler-armchair icon-16px me-1"></i> Masalar
       </a>
     @endif
+    @if ($editable && $order->dining_table_id)
+      <button type="button" class="btn btn-label-secondary" data-bs-toggle="offcanvas" data-bs-target="#moveTablePanel">
+        <i class="icon-base ti tabler-arrows-right-left icon-16px me-1"></i> Masayı Değiştir
+      </button>
+    @endif
+    @if ($editable && (float) $order->paid_total === 0.0)
+      <button type="button" class="btn btn-label-secondary" data-bs-toggle="offcanvas" data-bs-target="#mergePanel">
+        <i class="icon-base ti tabler-git-merge icon-16px me-1"></i> Hesap Birleştir
+      </button>
+    @endif
     @if ($editable && (float) $order->paid_total === 0.0)
       <form method="POST" action="{{ route('orders.cancel', $order) }}" class="d-inline"
         data-prompt-reason="{{ $order->label() }} tümüyle iptal edilsin mi?"
@@ -41,6 +51,23 @@
     @endif
   </x-slot:actions>
 </x-page-header>
+
+@if ($order->mergedInto)
+  <div class="alert alert-secondary d-flex align-items-center gap-3 mb-6" role="status">
+    <i class="icon-base ti tabler-git-merge icon-22px"></i>
+    <span class="flex-grow-1">Bu hesap <strong>{{ $order->mergedInto->label() }}</strong> hesabına birleştirildi; kalemleri ve ödemesi orada.</span>
+    <a href="{{ route('orders.show', $order->mergedInto) }}" class="btn btn-sm btn-secondary">Hesaba git</a>
+  </div>
+@endif
+
+@if ($order->mergedOrders->isNotEmpty())
+  <div class="d-flex flex-wrap align-items-center gap-2 mb-6 small">
+    <span class="text-body-secondary"><i class="icon-base ti tabler-git-merge icon-14px me-1"></i>Bu hesaba birleştirilenler:</span>
+    @foreach ($order->mergedOrders as $merged)
+      <a href="{{ route('orders.show', $merged) }}" class="badge bg-label-secondary">{{ $merged->label() }}</a>
+    @endforeach
+  </div>
+@endif
 
 <div class="row g-6">
   @if ($editable)
@@ -120,6 +147,10 @@
     </div>
   </div>
 </div>
+
+@if ($editable)
+  @include('orders._transfer-panels')
+@endif
 
 @if ($order->isOpen() && auth()->user()->canHandlePayments())
   @include('orders._payment-panel')

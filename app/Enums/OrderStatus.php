@@ -10,6 +10,7 @@ enum OrderStatus: string
     case TeslimEdildi = 'teslim_edildi';
     case Kapandi = 'kapandi';
     case Iptal = 'iptal';
+    case Birlesti = 'birlesti';
 
     public function label(): string
     {
@@ -20,6 +21,7 @@ enum OrderStatus: string
             self::TeslimEdildi => 'Teslim Edildi',
             self::Kapandi => 'Kapandı',
             self::Iptal => 'İptal',
+            self::Birlesti => 'Birleştirildi',
         };
     }
 
@@ -32,6 +34,7 @@ enum OrderStatus: string
             self::TeslimEdildi => 'primary',
             self::Kapandi => 'success',
             self::Iptal => 'danger',
+            self::Birlesti => 'secondary',
         };
     }
 
@@ -71,7 +74,18 @@ enum OrderStatus: string
             self::TeslimEdildi => 'tabler-truck-delivery',
             self::Kapandi => 'tabler-lock',
             self::Iptal => 'tabler-ban',
+            self::Birlesti => 'tabler-git-merge',
         };
+    }
+
+    /**
+     * Siparişin kapandığı durumlar: ödendi, iptal edildi ya da başka bir hesaba birleştirildi.
+     *
+     * @return array<int, self>
+     */
+    public static function closed(): array
+    {
+        return [self::Kapandi, self::Iptal, self::Birlesti];
     }
 
     /**
