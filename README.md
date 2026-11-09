@@ -126,9 +126,9 @@ Tüm ekranlar Vuexy bileşenleriyle hazırlanır: seçim kutuları Select2, tari
 - Hazırlık ekranı: yeni / hazırlanıyor / hazır sütunlu, 15 saniyede bir kendini yenileyen pano; bekleme süresine göre renk, sonradan eklenen kalemlerin işaretlenmesi, sesli yeni sipariş uyarısı, tam ekran; hazırlanmış siparişe ürün eklenince sipariş yeniden sıraya girer
 - Kasa ve ödeme: kasa oturumu açma (başlangıç nakdi), nakit/kart ödeme, bölünmüş hesap, para üstü hesabı, tamamı ödenince siparişin kapanıp masanın boşalması, elle kasa girişi/çıkışı, kapanışta sayılan ve beklenen nakdin karşılaştırılması, kasa geçmişi ve `sp_gunluk_kasa_raporu` ile günlük rapor
 - Yönetim: çalışan ekleme/düzenleme, rol ve aktiflik (pasif çalışanın oturumu anında kapanır, son aktif yönetici korunur), güne göre gruplu ve filtrelenebilir işlem geçmişi, her çalışan için Profilim (bilgi ve şifre değiştirme)
+- Raporlar: hazır dönemler ve tarih aralığı; önceki döneme göre ciro değişimi, nakit/kart, ortalama adisyon, iptaller; günlük ciro, en çok satan ürünler, kategoriye göre satış ve saatlik yoğunluk grafikleri (tablo görünümüyle)
 
 **Sıradakiler**
 
-- Raporlar: günlük/haftalık ciro, en çok satan ürünler ve saatlik yoğunluk grafikleri
 - Masa taşıma ve hesap birleştirme
 - Mutfak/bar için yazdırılabilir sipariş fişi ve adisyon çıktısı
