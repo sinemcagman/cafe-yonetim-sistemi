@@ -45,7 +45,7 @@ class OrderController extends Controller
 
         $history = $tab === 'gecmis'
             ? Order::query()
-                ->whereIn('status', [OrderStatus::Kapandi, OrderStatus::Iptal])
+                ->whereIn('status', OrderStatus::closed())
                 ->tap($filters)
                 ->when($this->dateRange($request), fn ($q, array $range) => $q->whereBetween('opened_at', $range))
                 ->with(['diningTable', 'user'])

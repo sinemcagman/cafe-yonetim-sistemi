@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
-#[Fillable(['type', 'dining_table_id', 'user_id', 'status', 'status_changed_at', 'note', 'total', 'paid_total', 'opened_at', 'closed_at'])]
+#[Fillable(['type', 'dining_table_id', 'merged_into_id', 'user_id', 'status', 'status_changed_at', 'note', 'total', 'paid_total', 'opened_at', 'closed_at'])]
 class Order extends Model
 {
     protected function casts(): array
@@ -61,6 +61,26 @@ class Order extends Model
     }
 
     /**
+     * Hesap birleştirmede bu siparişin kalemlerinin aktarıldığı sipariş.
+     *
+     * @return BelongsTo<Order, $this>
+     */
+    public function mergedInto(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'merged_into_id');
+    }
+
+    /**
+     * Bu siparişe birleştirilen siparişler.
+     *
+     * @return HasMany<Order, $this>
+     */
+    public function mergedOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'merged_into_id');
+    }
+
+    /**
      * @return HasMany<Payment, $this>
      */
     public function payments(): HasMany
@@ -70,12 +90,12 @@ class Order extends Model
 
     public function scopeOpen(Builder $query): void
     {
-        $query->whereNotIn('status', [OrderStatus::Kapandi, OrderStatus::Iptal]);
+        $query->whereNotIn('status', OrderStatus::closed());
     }
 
     public function isOpen(): bool
     {
-        return ! in_array($this->status, [OrderStatus::Kapandi, OrderStatus::Iptal], true);
+        return ! in_array($this->status, OrderStatus::closed(), true);
     }
 
     /**
