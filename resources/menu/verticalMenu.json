@@ -108,6 +108,15 @@
       ]
     },
     {
+      "route": "reports.index",
+      "name": "Raporlar",
+      "icon": "menu-icon icon-base ti tabler-chart-histogram",
+      "slug": "reports.*",
+      "roles": [
+        "yonetici"
+      ]
+    },
+    {
       "route": "users.index",
       "name": "Çalışanlar",
       "icon": "menu-icon icon-base ti tabler-users",
