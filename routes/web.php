@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PreparationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,7 @@ Route::middleware('auth')->group(function () {
             ->names('users');
 
         Route::get('islem-gecmisi', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+        Route::get('raporlar', [ReportController::class, 'index'])->name('reports.index');
 
         Route::get('stok-hareketleri', [StockMovementController::class, 'index'])->name('stock-movements.index');
         Route::post('urunler/{product}/stok', [StockMovementController::class, 'store'])->name('products.stock');
