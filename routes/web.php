@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
         Route::post('masalar/{table}/siparis', [OrderController::class, 'openForTable'])->name('tables.open-order');
         Route::patch('siparisler/{order}/not', [OrderController::class, 'updateNote'])->name('orders.note');
         Route::post('siparisler/{order}/iptal', [OrderController::class, 'cancel'])->name('orders.cancel');
+        Route::post('siparisler/{order}/tasi', [OrderController::class, 'move'])->name('orders.move');
+        Route::post('siparisler/{order}/birlestir', [OrderController::class, 'merge'])->name('orders.merge');
         Route::post('siparisler/{order}/kalemler', [OrderItemController::class, 'store'])->name('orders.items.store');
         Route::post('siparisler/{order}/kalemler/{item}/iptal', [OrderItemController::class, 'cancel'])->name('orders.items.cancel');
         Route::post('siparisler/{order}/durum', [OrderStatusController::class, 'advance'])->name('orders.advance');

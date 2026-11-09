@@ -104,6 +104,9 @@ class OrderController extends Controller
         return view('orders.show', [
             'order' => $order,
             'cashSession' => $this->cash->currentSession(),
+            // Masa taşıma ve hesap birleştirme panelleri için seçenekler
+            'emptyTables' => DiningTable::active()->where('status', 'bos')->orderBy('number')->get(),
+            'mergeTargets' => Order::open()->whereKeyNot($order->id)->with('diningTable')->oldest('opened_at')->get(),
             'categories' => Category::query()
                 ->active()
                 ->ordered()
@@ -112,6 +115,40 @@ class OrderController extends Controller
                 ->filter(fn (Category $category) => $category->products->isNotEmpty())
                 ->values(),
         ]);
+    }
+
+    public function move(Request $request, Order $order): RedirectResponse
+    {
+        $data = $request->validate(
+            ['dining_table_id' => ['required', 'integer', 'exists:dining_tables,id']],
+            [],
+            ['dining_table_id' => 'yeni masa'],
+        );
+
+        try {
+            $order = $this->orders->moveToTable($order, DiningTable::findOrFail($data['dining_table_id']), $request->user());
+        } catch (DomainException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('orders.show', $order)->with('success', "Sipariş {$order->diningTable->label()} masasına taşındı.");
+    }
+
+    public function merge(Request $request, Order $order): RedirectResponse
+    {
+        $data = $request->validate(
+            ['target_order_id' => ['required', 'integer', 'exists:orders,id']],
+            [],
+            ['target_order_id' => 'birleştirilecek hesap'],
+        );
+
+        try {
+            $target = $this->orders->merge($order, Order::findOrFail($data['target_order_id']), $request->user());
+        } catch (DomainException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('orders.show', $target)->with('success', "{$order->label()} bu hesaba birleştirildi.");
     }
 
     public function updateNote(Request $request, Order $order): RedirectResponse
