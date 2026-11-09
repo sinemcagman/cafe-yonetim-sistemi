@@ -127,8 +127,8 @@ Tüm ekranlar Vuexy bileşenleriyle hazırlanır: seçim kutuları Select2, tari
 - Kasa ve ödeme: kasa oturumu açma (başlangıç nakdi), nakit/kart ödeme, bölünmüş hesap, para üstü hesabı, tamamı ödenince siparişin kapanıp masanın boşalması, elle kasa girişi/çıkışı, kapanışta sayılan ve beklenen nakdin karşılaştırılması, kasa geçmişi ve `sp_gunluk_kasa_raporu` ile günlük rapor
 - Yönetim: çalışan ekleme/düzenleme, rol ve aktiflik (pasif çalışanın oturumu anında kapanır, son aktif yönetici korunur), güne göre gruplu ve filtrelenebilir işlem geçmişi, her çalışan için Profilim (bilgi ve şifre değiştirme)
 - Raporlar: hazır dönemler ve tarih aralığı; önceki döneme göre ciro değişimi, nakit/kart, ortalama adisyon, iptaller; günlük ciro, en çok satan ürünler, kategoriye göre satış ve saatlik yoğunluk grafikleri (tablo görünümüyle)
+- Masa taşıma ve hesap birleştirme: siparişi boş bir masaya taşıma; iki hesabı tek adisyonda birleştirme (kalemler aktarılır, toplamlar trigger'larla güncellenir, kaynak sipariş "Birleştirildi" olarak kapanır ve masası boşalır)
 
 **Sıradakiler**
 
-- Masa taşıma ve hesap birleştirme
 - Mutfak/bar için yazdırılabilir sipariş fişi ve adisyon çıktısı
