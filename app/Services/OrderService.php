@@ -219,6 +219,102 @@ class OrderService
         });
     }
 
+    /**
+     * Masa siparişini başka bir boş masaya taşır: eski masa boşalır, yeni masa dolar. Kalemler ve ödemeler aynen kalır.
+     */
+    public function moveToTable(Order $order, DiningTable $target, User $user): Order
+    {
+        return DB::transaction(function () use ($order, $target, $user) {
+            $order = Order::query()->lockForUpdate()->findOrFail($order->getKey());
+            $target = DiningTable::query()->lockForUpdate()->findOrFail($target->getKey());
+            $this->ensureEditable($order);
+
+            if ($order->type !== OrderType::Masa || ! $order->dining_table_id) {
+                throw new DomainException('Yalnızca masa siparişleri başka masaya taşınabilir.');
+            }
+
+            if ($order->dining_table_id === $target->id) {
+                throw new DomainException("Sipariş zaten {$target->label()} üzerinde.");
+            }
+
+            if (! $target->is_active || $target->openOrder()->exists()) {
+                throw new DomainException("{$target->label()} boş değil; taşımak için boş bir masa seçin.");
+            }
+
+            $from = $order->diningTable;
+            $order->update(['dining_table_id' => $target->id]);
+            $from?->update(['status' => TableStatus::Bos]);
+            $target->update(['status' => TableStatus::Dolu]);
+
+            ActivityLog::record('siparis_tasindi', "{$order->code()} numaralı sipariş {$from?->label()} → {$target->label()} taşındı.", $order, [
+                'onceki_masa' => $from?->number,
+                'yeni_masa' => $target->number,
+            ]);
+
+            return $order->refresh();
+        });
+    }
+
+    /**
+     * $source siparişini $target siparişine birleştirir: tüm kalemler (iptal edilenler dahil, geçmiş kaybolmasın diye)
+     * hedefe aktarılır, toplamlar trigger'larla yeniden hesaplanır, kaynak sipariş "Birleştirildi" olarak kapanır
+     * ve masası boşalır. Ödemesi alınmış bir hesap birleştirilemez.
+     */
+    public function merge(Order $source, Order $target, User $user): Order
+    {
+        if ($source->is($target)) {
+            throw new DomainException('Bir sipariş kendisiyle birleştirilemez.');
+        }
+
+        return DB::transaction(function () use ($source, $target, $user) {
+            // Kilit sırası her zaman küçük kimlikten büyüğe: iki kişi aynı anda ters yönde birleştirirse kilitlenme olmasın
+            $locked = Order::query()->whereKey([$source->getKey(), $target->getKey()])->orderBy('id')->lockForUpdate()->get()->keyBy('id');
+            $source = $locked[$source->getKey()];
+            $target = $locked[$target->getKey()];
+
+            $this->ensureEditable($source);
+            $this->ensureEditable($target);
+
+            if ((float) $source->paid_total > 0) {
+                throw new DomainException("{$source->label()} için ödeme alınmış; birleştirilemez. Kalan tutarın ödemesini ayrı alın.");
+            }
+
+            $movedItems = $source->activeItems()->count();
+            $movedAmount = (float) $source->total;
+
+            $source->items()->update(['order_id' => $target->id]);
+
+            // Hazırlıkta geride olan sipariş kazanır: hedef hazır olsa bile yeni gelen kalemler mutfakta görünsün
+            $flow = [OrderStatus::Yeni, OrderStatus::Hazirlaniyor, OrderStatus::Hazir, OrderStatus::TeslimEdildi];
+            $earliest = $flow[min(array_search($source->status, $flow, true), array_search($target->status, $flow, true))];
+
+            $target->refresh();
+            $target->update(array_filter([
+                'status' => $earliest !== $target->status ? $earliest : null,
+                'status_changed_at' => $earliest !== $target->status ? now() : null,
+                'note' => $source->note
+                    ? trim(collect([$target->note, "{$source->label()}: {$source->note}"])->filter()->implode("\n"))
+                    : null,
+            ]));
+
+            $source->update([
+                'status' => OrderStatus::Birlesti,
+                'status_changed_at' => now(),
+                'merged_into_id' => $target->id,
+                'closed_at' => now(),
+            ]);
+            $source->diningTable?->update(['status' => TableStatus::Bos]);
+
+            ActivityLog::record('siparis_birlestirildi', "{$source->label()} hesabı {$target->label()} hesabına birleştirildi ({$movedItems} kalem, ".money($movedAmount).').', $target, [
+                'kaynak' => $source->code(),
+                'kalem' => $movedItems,
+                'tutar' => $movedAmount,
+            ]);
+
+            return $target->refresh();
+        });
+    }
+
     public function updateNote(Order $order, ?string $note, User $user): Order
     {
         $this->ensureEditable($order);
