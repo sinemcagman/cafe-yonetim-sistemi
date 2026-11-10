@@ -106,6 +106,25 @@ SELECT * FROM v_urun_stok_durumu WHERE stok_durumu <> 'yeterli';
 CALL sp_gunluk_kasa_raporu('2026-10-28');
 ```
 
+## Güvenlik
+
+- Giriş: e-posta ve IP başına 5 hatalı denemeden sonra geçici kilit; girişte oturum yenilenir, pasif çalışanın oturumu anında kapanır, şifre değişince diğer cihazlardaki oturumlar kapatılır
+- Yetki: her işlem rol ara katmanıyla korunur (Yönetici / Garson / Kasiyer); iç içe kayıtlarda (sipariş → kalem) kaydın gerçekten o siparişe ait olduğu kontrol edilir
+- XSS: Blade çıktıları kaçışlanır; bildirimler, onay pencereleri ve grafik ipuçları ürün, kategori ve çalışan adlarını düz metin olarak gösterir
+- Tüm sayfalarda güvenlik başlıkları gönderilir (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, çerçevelemeyi kısıtlayan `Content-Security-Policy`, HTTPS'te `Strict-Transport-Security`)
+- Canlı ortamda yalnızca `APP_URL` alan adından gelen istekler kabul edilir; QR kartları ve yönlendirmeler sahte `Host` başlığıyla başka adrese çevrilemez
+- Bağımlılıklar `composer audit` ve `yarn audit` ile denetlenir
+
+Yayına alırken `.env` içinde şunları ayarlayın:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://kafeniz.com
+SESSION_SECURE_COOKIE=true
+SESSION_ENCRYPT=true
+```
+
 ## Arayüz kuralları
 
 Tüm ekranlar Vuexy bileşenleriyle hazırlanır: seçim kutuları Select2, tarih alanları flatpickr, listeler sayfalı. Ayrıntılar için [docs/arayuz-kurallari.md](docs/arayuz-kurallari.md).
