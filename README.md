@@ -129,7 +129,4 @@ Tüm ekranlar Vuexy bileşenleriyle hazırlanır: seçim kutuları Select2, tari
 - Raporlar: hazır dönemler ve tarih aralığı; önceki döneme göre ciro değişimi, nakit/kart, ortalama adisyon, iptaller; günlük ciro, en çok satan ürünler, kategoriye göre satış ve saatlik yoğunluk grafikleri (tablo görünümüyle)
 - Masa taşıma ve hesap birleştirme: siparişi boş bir masaya taşıma; iki hesabı tek adisyonda birleştirme (kalemler aktarılır, toplamlar trigger'larla güncellenir, kaynak sipariş "Birleştirildi" olarak kapanır ve masası boşalır)
 - Yazdırılabilir çıktılar (80 mm termal yazıcı): müşteri adisyonu (aynı ürünler tek satırda, ödemeler, kalan tutar, şube bilgileri) ve fiyatsız, büyük yazılı mutfak/bar fişi; sonradan eklenen ürünler işaretlenir ya da yalnızca onlar basılabilir. Şube adı, adresi ve telefonu `.env` içindeki `KAFE_*` değişkenlerinden gelir
-
-**Sıradakiler**
-
-- Müşterilerin telefondan açtığı QR menü ve masalar için yazdırılabilir QR kartları
+- QR menü: müşterilerin girişsiz açtığı, telefona uygun `/menu` sayfası (kategoriye göre kaydırma, arama, tükenen ürünler, telefonun açık/koyu temasını izleme); yönetici masalar ekranından seçtiği masalar için A4 QR kartları basar, kart okutulunca menü masa numarasıyla açılır
