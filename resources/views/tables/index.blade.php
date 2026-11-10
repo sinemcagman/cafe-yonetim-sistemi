@@ -15,6 +15,11 @@
   </x-slot:breadcrumb>
   @if ($isManager)
     <x-slot:actions>
+      @if ($tables->where('is_active', true)->isNotEmpty())
+        <button type="button" class="btn btn-label-secondary" data-bs-toggle="offcanvas" data-bs-target="#qrPanel">
+          <i class="icon-base ti tabler-qrcode icon-16px me-1"></i> QR Kartları
+        </button>
+      @endif
       <button type="button" class="btn btn-primary" data-table-create>
         <i class="icon-base ti tabler-plus icon-16px me-1"></i> Masa Ekle
       </button>
@@ -97,6 +102,42 @@
         @include('tables._form', ['table' => new \App\Models\DiningTable(['number' => $nextNumber, 'capacity' => 4, 'is_active' => true])])
         <button type="submit" class="btn btn-primary me-3">Kaydet</button>
         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Vazgeç</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- QR menü kartları -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="qrPanel" aria-labelledby="qrPanelLabel">
+    <div class="offcanvas-header border-bottom">
+      <h5 id="qrPanelLabel" class="offcanvas-title">QR Menü Kartları</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Kapat"></button>
+    </div>
+    <div class="offcanvas-body p-6">
+      <p class="mb-6">Masalara konacak kartları A4 kâğıda basın. Müşteri kodu okuttuğunda menü telefonunda açılır ve masa numarasıyla karşılanır.</p>
+      <form method="GET" action="{{ route('tables.qr-cards') }}" target="_blank">
+        <div class="mb-6">
+          <label class="form-label" for="qr-tables">Masalar</label>
+          <select name="masalar[]" id="qr-tables" class="select2 form-select" data-placeholder="Tüm aktif masalar" multiple>
+            @foreach ($tables->where('is_active', true)->groupBy(fn ($table) => $table->area ?: 'Diğer') as $area => $areaTables)
+              <optgroup label="{{ $area }}">
+                @foreach ($areaTables as $table)
+                  <option value="{{ $table->id }}">{{ $table->label() }}</option>
+                @endforeach
+              </optgroup>
+            @endforeach
+          </select>
+          <div class="form-text">Boş bırakırsanız tüm aktif masaların kartı basılır.</div>
+        </div>
+        <div class="form-check mb-6">
+          <input class="form-check-input" type="checkbox" name="genel" value="1" id="qr-general" checked>
+          <label class="form-check-label" for="qr-general">Kasa ve vitrin için masa numarasız kart da ekle</label>
+        </div>
+        <button type="submit" class="btn btn-primary me-3">
+          <i class="icon-base ti tabler-printer icon-16px me-1"></i> Kartları Hazırla
+        </button>
+        <a href="{{ route('menu') }}" target="_blank" rel="noopener" class="btn btn-label-secondary">
+          <i class="icon-base ti tabler-external-link icon-16px me-1"></i> Menüyü Gör
+        </a>
       </form>
     </div>
   </div>

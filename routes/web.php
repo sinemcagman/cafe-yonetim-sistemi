@@ -6,6 +6,7 @@ use App\Http\Controllers\CashController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiningTableController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\OrderPrintController;
@@ -14,10 +15,14 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PreparationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QrCardController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+// Müşteri menüsü: girişsiz, masalardaki QR kartlarından açılır
+Route::get('menu', MenuController::class)->name('menu');
 
 Route::middleware('guest')->group(function () {
     Route::get('giris', [LoginController::class, 'create'])->name('login');
@@ -67,6 +72,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:yonetici')->group(function () {
+        Route::get('masalar/qr-kartlari', QrCardController::class)->name('tables.qr-cards');
+
         Route::resource('masalar', DiningTableController::class)
             ->except(['index', 'show'])
             ->parameters(['masalar' => 'table'])
