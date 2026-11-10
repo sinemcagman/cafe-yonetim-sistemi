@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>@yield('title') | {{ config('kafe.name') }}</title>
-  <link rel="icon" type="image/svg+xml" href="{{ asset('assets/img/favicon/favicon.svg') }}">
+  <link rel="icon" type="image/svg+xml" href="{{ asset('assets/img/branding/favicon.svg') }}?v=2">
   <style>
     @page { size: 80mm auto; margin: 0; }
 
