@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('siparisler', [OrderController::class, 'index'])->name('orders.index');
     Route::get('siparisler/{order}', [OrderController::class, 'show'])->whereNumber('order')->name('orders.show');
     Route::get('siparisler/{order}/adisyon', [OrderPrintController::class, 'receipt'])->whereNumber('order')->name('orders.print.receipt');
+    Route::get('siparisler/{order}/mutfak-fisi', [OrderPrintController::class, 'kitchen'])->whereNumber('order')->name('orders.print.kitchen');
     Route::get('hazirlik', [PreparationController::class, 'index'])->name('preparation.index');
 
     // Sipariş açma ve düzenleme: garson ve yönetici

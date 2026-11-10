@@ -7,6 +7,7 @@ use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
@@ -39,6 +40,31 @@ class OrderPrintController extends Controller
             'order' => $order,
             'lines' => $lines,
             'backUrl' => route('orders.show', $order),
+        ]);
+    }
+
+    /**
+     * Mutfak/bar fişi: fiyatsız, büyük yazılı kalem listesi ve sipariş notu.
+     * ?sadece=yeni ile yalnızca son durum değişikliğinden sonra eklenen kalemler basılır.
+     */
+    public function kitchen(Request $request, Order $order): View
+    {
+        $order->load(['diningTable', 'user', 'items' => fn ($q) => $q->with('product')->oldest()]);
+
+        $lateIds = $order->lateItemIds();
+        $onlyLate = $request->input('sadece') === 'yeni' && $lateIds->isNotEmpty();
+
+        $items = $order->items
+            ->where('status', OrderItemStatus::Aktif)
+            ->when($onlyLate, fn ($items) => $items->whereIn('id', $lateIds));
+
+        return view('orders.print.kitchen', [
+            'order' => $order,
+            'items' => $items,
+            'lateIds' => $lateIds,
+            'onlyLate' => $onlyLate,
+            // Hazırlık panosundan açılan fiş "Geri dön" ile panoya döner
+            'backUrl' => $request->input('kaynak') === 'hazirlik' ? route('preparation.index') : route('orders.show', $order),
         ]);
     }
 }
