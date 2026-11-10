@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiningTableController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\OrderPrintController;
 use App\Http\Controllers\OrderStatusController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PreparationController;
@@ -36,6 +37,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('siparisler', [OrderController::class, 'index'])->name('orders.index');
     Route::get('siparisler/{order}', [OrderController::class, 'show'])->whereNumber('order')->name('orders.show');
+    Route::get('siparisler/{order}/adisyon', [OrderPrintController::class, 'receipt'])->whereNumber('order')->name('orders.print.receipt');
+    Route::get('siparisler/{order}/mutfak-fisi', [OrderPrintController::class, 'kitchen'])->whereNumber('order')->name('orders.print.kitchen');
     Route::get('hazirlik', [PreparationController::class, 'index'])->name('preparation.index');
 
     // Sipariş açma ve düzenleme: garson ve yönetici

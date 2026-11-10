@@ -76,6 +76,11 @@
                 </button>
               </form>
             @endif
+            <a href="{{ route('orders.print.kitchen', [$order, 'yazdir' => 1, 'kaynak' => 'hazirlik']) }}" target="_blank" rel="noopener"
+              class="btn btn-icon btn-label-secondary" data-bs-toggle="tooltip"
+              title="Mutfak fişi yazdır" aria-label="{{ $order->label() }} mutfak fişini yazdır">
+              <i class="icon-base ti tabler-printer icon-18px"></i>
+            </a>
             <a href="{{ route('orders.show', $order) }}" class="btn btn-icon btn-label-secondary" data-bs-toggle="tooltip"
               title="Siparişi aç" aria-label="{{ $order->label() }} siparişini aç">
               <i class="icon-base ti tabler-external-link icon-18px"></i>

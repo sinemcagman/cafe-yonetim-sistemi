@@ -27,27 +27,64 @@
         <i class="icon-base ti tabler-armchair icon-16px me-1"></i> Masalar
       </a>
     @endif
-    @if ($editable && $order->dining_table_id)
-      <button type="button" class="btn btn-label-secondary" data-bs-toggle="offcanvas" data-bs-target="#moveTablePanel">
-        <i class="icon-base ti tabler-arrows-right-left icon-16px me-1"></i> Masayı Değiştir
-      </button>
-    @endif
-    @if ($editable && (float) $order->paid_total === 0.0)
-      <button type="button" class="btn btn-label-secondary" data-bs-toggle="offcanvas" data-bs-target="#mergePanel">
-        <i class="icon-base ti tabler-git-merge icon-16px me-1"></i> Hesap Birleştir
-      </button>
-    @endif
-    @if ($editable && (float) $order->paid_total === 0.0)
-      <form method="POST" action="{{ route('orders.cancel', $order) }}" class="d-inline"
-        data-prompt-reason="{{ $order->label() }} tümüyle iptal edilsin mi?"
-        data-prompt-text="Tüm kalemler iptal edilir, ürün adetleri stoğa geri eklenir{{ $order->diningTable ? ' ve masa boşalır' : '' }}."
-        data-prompt-placeholder="Örn. Müşteri ayrıldı" data-prompt-button="Siparişi iptal et">
-        @csrf
-        <input type="hidden" name="reason">
-        <button type="submit" class="btn btn-label-danger">
-          <i class="icon-base ti tabler-ban icon-16px me-1"></i> Siparişi İptal Et
+    @if (! $order->mergedInto)
+      <div class="btn-group">
+        <button type="button" class="btn btn-label-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="icon-base ti tabler-printer icon-16px me-1"></i> Yazdır
         </button>
-      </form>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('orders.print.receipt', [$order, 'yazdir' => 1]) }}" target="_blank" rel="noopener">
+              <i class="icon-base ti tabler-receipt icon-18px"></i>
+              <span>Adisyon<small class="d-block text-body-secondary">Müşteriye verilen hesap</small></span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('orders.print.kitchen', [$order, 'yazdir' => 1]) }}" target="_blank" rel="noopener">
+              <i class="icon-base ti tabler-chef-hat icon-18px"></i>
+              <span>Mutfak fişi<small class="d-block text-body-secondary">Fiyatsız, büyük yazılı</small></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    @endif
+    @php $unpaid = (float) $order->paid_total === 0.0; @endphp
+    @if ($editable && ($order->dining_table_id || $unpaid))
+      {{-- Seyrek kullanılan işlemler tek menüde: başlık dar ekranlarda taşmaz --}}
+      <div class="btn-group">
+        <button type="button" class="btn btn-label-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="icon-base ti tabler-dots-circle-horizontal icon-16px me-1"></i> İşlemler
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          @if ($order->dining_table_id)
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center gap-2" data-bs-toggle="offcanvas" data-bs-target="#moveTablePanel">
+                <i class="icon-base ti tabler-arrows-right-left icon-18px"></i> Masayı Değiştir
+              </button>
+            </li>
+          @endif
+          @if ($unpaid)
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center gap-2" data-bs-toggle="offcanvas" data-bs-target="#mergePanel">
+                <i class="icon-base ti tabler-git-merge icon-18px"></i> Hesap Birleştir
+              </button>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form method="POST" action="{{ route('orders.cancel', $order) }}"
+                data-prompt-reason="{{ $order->label() }} tümüyle iptal edilsin mi?"
+                data-prompt-text="Tüm kalemler iptal edilir, ürün adetleri stoğa geri eklenir{{ $order->diningTable ? ' ve masa boşalır' : '' }}."
+                data-prompt-placeholder="Örn. Müşteri ayrıldı" data-prompt-button="Siparişi iptal et">
+                @csrf
+                <input type="hidden" name="reason">
+                <button type="submit" class="dropdown-item d-flex align-items-center gap-2 text-danger">
+                  <i class="icon-base ti tabler-ban icon-18px"></i> Siparişi İptal Et
+                </button>
+              </form>
+            </li>
+          @endif
+        </ul>
+      </div>
     @endif
   </x-slot:actions>
 </x-page-header>
