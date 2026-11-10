@@ -27,6 +27,27 @@
         <i class="icon-base ti tabler-armchair icon-16px me-1"></i> Masalar
       </a>
     @endif
+    @if (! $order->mergedInto)
+      <div class="btn-group">
+        <button type="button" class="btn btn-label-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="icon-base ti tabler-printer icon-16px me-1"></i> Yazdır
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('orders.print.receipt', [$order, 'yazdir' => 1]) }}" target="_blank" rel="noopener">
+              <i class="icon-base ti tabler-receipt icon-18px"></i>
+              <span>Adisyon<small class="d-block text-body-secondary">Müşteriye verilen hesap</small></span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('orders.print.kitchen', [$order, 'yazdir' => 1]) }}" target="_blank" rel="noopener">
+              <i class="icon-base ti tabler-chef-hat icon-18px"></i>
+              <span>Mutfak fişi<small class="d-block text-body-secondary">Fiyatsız, büyük yazılı</small></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    @endif
     @if ($editable && $order->dining_table_id)
       <button type="button" class="btn btn-label-secondary" data-bs-toggle="offcanvas" data-bs-target="#moveTablePanel">
         <i class="icon-base ti tabler-arrows-right-left icon-16px me-1"></i> Masayı Değiştir
