@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\EnsureUserIsActive;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -20,7 +21,12 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->web(append: [
             EnsureUserIsActive::class,
+            SecurityHeaders::class,
         ]);
+
+        // Yalnızca APP_URL alan adından gelen isteklere yanıt ver: QR kartları ve yönlendirmeler
+        // istemcinin gönderdiği Host başlığıyla başka bir adrese yönlendirilemez (yerelde ve testte devre dışı)
+        $middleware->trustHosts();
 
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->redirectUsersTo(fn () => route('dashboard'));
