@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const moneyShort = value =>
     new Intl.NumberFormat('tr-TR', { notation: 'compact', maximumFractionDigits: 1 }).format(value) + ' ₺';
   const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  // İpucu başlığı HTML olarak basılır; ürün ve kategori adları düz metin kalsın
+  const escapeHtml = value =>
+    String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 
   /** Tek renkli, ince işaretli, ızgarası silik ortak ayarlar */
   const base = () => {
@@ -32,7 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
       dataLabels: { enabled: false },
       legend: { show: false },
       states: { hover: { filter: { type: 'darken', value: 0.88 } } },
-      tooltip: { theme: document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light' },
+      tooltip: {
+        theme: document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light',
+        x: { formatter: escapeHtml }
+      },
       xaxis: { axisBorder: { show: false }, axisTicks: { show: false }, labels: { style: { colors: ink } } },
       yaxis: { labels: { style: { colors: ink } } }
     };

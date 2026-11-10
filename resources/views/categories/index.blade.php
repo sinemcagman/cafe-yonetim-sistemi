@@ -80,7 +80,7 @@
                       <i class="icon-base ti tabler-coffee icon-sm"></i> Ürünlerini gör
                     </a>
                     <div class="dropdown-divider"></div>
-                    <x-delete-button :action="route('categories.destroy', $category)" confirm="{{ $category->name }} silinsin mi?"
+                    <x-delete-button :action="route('categories.destroy', $category)" :confirm="$category->name.' silinsin mi?'"
                       text="İçinde ürün bulunan kategoriler silinemez; bunun yerine pasif yapabilirsiniz." />
                   </div>
                 </div>

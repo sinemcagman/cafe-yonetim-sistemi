@@ -11,10 +11,24 @@ import.meta.glob(['../assets/img/**', '../assets/vendor/fonts/**']);
 let notyf = null;
 
 /**
+ * Notyf mesajı HTML olarak basar. Mesajlarda ürün, kategori ve çalışan adları geçtiği için
+ * metin her zaman kaçışlanır; böylece bir isme yazılan HTML/script çalışmaz.
+ */
+function escapeHtml(value) {
+  return String(value).replace(
+    /[&<>"']/g,
+    char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]
+  );
+}
+
+/**
  * Sağ üstte kısa süreli bildirim gösterir. Sayfa script'leri de kullanır: window.notify('success', 'Kaydedildi')
+ * Mesaj düz metin olarak gösterilir.
  */
 function notify(type, message) {
   if (!window.Notyf || !message) return;
+
+  message = escapeHtml(message);
 
   notyf ??= new window.Notyf({
     duration: 4000,
@@ -59,8 +73,9 @@ function bindConfirmForms() {
       return;
     }
 
+    // titleText/text düz metin olarak basılır: başlıkta geçen ürün ya da çalışan adı HTML olarak yorumlanmaz
     window.Swal.fire({
-      title: form.dataset.confirm,
+      titleText: form.dataset.confirm,
       text: form.dataset.confirmText || 'Bu işlem geri alınamaz.',
       icon: 'warning',
       showCancelButton: true,
@@ -106,7 +121,7 @@ function bindReasonPrompts() {
     }
 
     window.Swal.fire({
-      title: form.dataset.promptReason,
+      titleText: form.dataset.promptReason,
       text: form.dataset.promptText || 'İptal nedeni işlem geçmişine kaydedilir.',
       icon: 'warning',
       input: 'text',

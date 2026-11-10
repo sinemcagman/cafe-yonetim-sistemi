@@ -146,7 +146,7 @@
                       <i class="icon-base ti tabler-dots-vertical icon-md"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
-                      <x-delete-button :action="route('users.destroy', $user)" confirm="{{ $user->name }} silinsin mi?"
+                      <x-delete-button :action="route('users.destroy', $user)" :confirm="$user->name.' silinsin mi?'"
                         text="Sipariş ya da kasa kaydı olan çalışanlar silinemez; bunun yerine pasif yapabilirsiniz." />
                     </div>
                   </div>

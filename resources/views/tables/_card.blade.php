@@ -27,7 +27,7 @@
                 <i class="icon-base ti tabler-edit icon-sm"></i> Düzenle
               </button>
               <div class="dropdown-divider"></div>
-              <x-delete-button :action="route('tables.destroy', $table)" confirm="{{ $table->label() }} silinsin mi?"
+              <x-delete-button :action="route('tables.destroy', $table)" :confirm="$table->label().' silinsin mi?'"
                 text="Sipariş geçmişi olan masalar silinemez; bunun yerine pasif yapabilirsiniz." />
             </div>
           </div>

@@ -196,7 +196,7 @@
                       <i class="icon-base ti tabler-history icon-sm"></i> Stok geçmişi
                     </a>
                     <div class="dropdown-divider"></div>
-                    <x-delete-button :action="route('products.destroy', $product)" confirm="{{ $product->name }} silinsin mi?"
+                    <x-delete-button :action="route('products.destroy', $product)" :confirm="$product->name.' silinsin mi?'"
                       text="Siparişlerde kullanılmış ürünler silinemez; satışını durdurabilirsiniz." />
                   </div>
                 </div>
