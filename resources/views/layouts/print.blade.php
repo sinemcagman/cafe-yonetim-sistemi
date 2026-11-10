@@ -62,9 +62,9 @@
 
     .toolbar button.primary { background: #c58b5a; border-color: #c58b5a; color: #2a1d15; font-weight: 600; }
 
-    .toolbar button:focus-visible,
     .toolbar a[aria-current="page"] { background: rgba(197, 139, 90, .25); }
 
+    .toolbar button:focus-visible,
     .toolbar a:focus-visible { outline: 2px solid #f5ebe0; outline-offset: 2px; }
 
     .paper {
