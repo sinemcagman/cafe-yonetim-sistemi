@@ -6,6 +6,7 @@ use App\Http\Controllers\CashController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiningTableController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\OrderPrintController;
@@ -18,6 +19,9 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+// Müşteri menüsü: girişsiz, masalardaki QR kartlarından açılır
+Route::get('menu', MenuController::class)->name('menu');
 
 Route::middleware('guest')->group(function () {
     Route::get('giris', [LoginController::class, 'create'])->name('login');
