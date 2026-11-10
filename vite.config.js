@@ -7,11 +7,13 @@ import iconsPlugin from './vite.icons.plugin.js';
 
 /**
  * Get Files from a directory
+ * Alt çizgiyle başlayan dosyalar (SCSS parçaları) derlemeye giriş olarak alınmaz.
+ * glob sürümleri arasında farklı yorumlanan !(_)* kalıbı yerine açık ignore kuralı kullanılır.
  * @param {string} query
  * @returns array
  */
-function GetFilesArray(query) {
-  return glob.sync(query);
+function GetFilesArray(query, skipPartials = false) {
+  return glob.sync(query, skipPartials ? { ignore: '**/_*' } : {});
 }
 
 // Page JS Files
@@ -24,16 +26,16 @@ const vendorJsFiles = GetFilesArray('resources/assets/vendor/js/*.js');
 const LibsJsFiles = GetFilesArray('resources/assets/vendor/libs/**/*.js');
 
 // Processing Libs Scss & Css Files
-const LibsScssFiles = GetFilesArray('resources/assets/vendor/libs/**/!(_)*.scss');
+const LibsScssFiles = GetFilesArray('resources/assets/vendor/libs/**/*.scss', true);
 const LibsCssFiles = GetFilesArray('resources/assets/vendor/libs/**/*.css');
 
 // Processing Core, Themes & Pages Scss Files
-const CoreScssFiles = GetFilesArray('resources/assets/vendor/scss/**/!(_)*.scss');
+const CoreScssFiles = GetFilesArray('resources/assets/vendor/scss/**/*.scss', true);
 
 // Processing Fonts Scss & JS Files
-const FontsScssFiles = GetFilesArray('resources/assets/vendor/fonts/!(_)*.scss');
-const FontsJsFiles = GetFilesArray('resources/assets/vendor/fonts/**/!(_)*.js');
-const FontsCssFiles = GetFilesArray('resources/assets/vendor/fonts/**/!(_)*.css');
+const FontsScssFiles = GetFilesArray('resources/assets/vendor/fonts/*.scss', true);
+const FontsJsFiles = GetFilesArray('resources/assets/vendor/fonts/**/*.js', true);
+const FontsCssFiles = GetFilesArray('resources/assets/vendor/fonts/**/*.css', true);
 
 // Processing Window Assignment for Libs like jKanban, pdfMake
 function libsWindowAssignment() {
