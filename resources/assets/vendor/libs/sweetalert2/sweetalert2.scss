@@ -32,7 +32,8 @@
     .swal2-title {
       line-height: $line-height-base;
       margin-block: 1.875rem 1rem;
-      max-inline-size: $swal2-width * .5;
+      // sweetalert2 11.22+ genişliği CSS değişkeni olarak verir; yarısı tarayıcıda hesaplanır
+      max-inline-size: calc(#{$swal2-width} * .5);
     }
     .swal2-actions {
       margin-block-start: 1rem;
