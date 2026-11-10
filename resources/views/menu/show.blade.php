@@ -40,7 +40,7 @@
     @if ($table)
       <div class="mb-2">
         <span class="badge bg-label-primary fs-6 px-3 py-2">
-          <i class="icon-base ti tabler-armchair icon-16px me-1"></i>{{ $table->label() }}'e hoş geldiniz
+          <i class="icon-base ti tabler-armchair icon-16px me-1"></i>Hoş geldiniz · {{ $table->label() }}
         </span>
       </div>
     @endif
