@@ -15,6 +15,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PreparationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QrCardController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\UserController;
@@ -71,6 +72,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:yonetici')->group(function () {
+        Route::get('masalar/qr-kartlari', QrCardController::class)->name('tables.qr-cards');
+
         Route::resource('masalar', DiningTableController::class)
             ->except(['index', 'show'])
             ->parameters(['masalar' => 'table'])

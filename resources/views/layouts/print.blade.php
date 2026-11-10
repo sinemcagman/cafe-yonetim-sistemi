@@ -1,5 +1,5 @@
 {{--
-  80 mm termal yazıcı düzeni. Vuexy stillerini yüklemez: çıktı yalnızca siyah metin ve çizgilerden oluşur.
+  Yazdırma düzeni. Varsayılan kâğıt 80 mm termal rulo; A4 çıktılar paper-size / paper-width bölümlerini değiştirir. Vuexy stillerini yüklemez: çıktı yalnızca siyah metin ve çizgilerden oluşur.
   Ekranda kâğıt önizlemesi ve araç çubuğu görünür; yazdırırken yalnızca kâğıt basılır.
   ?yazdir=1 ile açılırsa yazdırma penceresi kendiliğinden açılır.
 --}}
@@ -12,7 +12,7 @@
   <title>@yield('title') | {{ config('kafe.name') }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('assets/img/branding/favicon.svg') }}?v=2">
   <style>
-    @page { size: 80mm auto; margin: 0; }
+    @page { size: @yield('paper-size', '80mm auto'); margin: @yield('paper-margin', '0'); }
 
     * { box-sizing: border-box; }
 
@@ -68,7 +68,7 @@
     .toolbar a:focus-visible { outline: 2px solid #f5ebe0; outline-offset: 2px; }
 
     .paper {
-      width: 80mm;
+      width: @yield('paper-width', '80mm');
       margin: 24px auto;
       padding: 5mm 4mm 8mm;
       background: #fff;
@@ -108,14 +108,17 @@
       .paper { width: auto; margin: 0; padding: 2mm 4mm 6mm; box-shadow: none; }
     }
   </style>
+  @yield('styles')
 </head>
 <body>
   <nav class="toolbar" aria-label="Yazdırma">
-    <span class="hint">@yield('title') · 80 mm önizleme</span>
+    <span class="hint">@yield('title') · @yield('paper-label', '80 mm') önizleme</span>
     @yield('toolbar')
     <button type="button" class="primary" onclick="window.print()" autofocus>Yazdır</button>
     <a href="{{ $backUrl ?? url()->previous() }}">Geri dön</a>
   </nav>
+
+  @yield('notice')
 
   <main class="paper">
     @yield('content')
